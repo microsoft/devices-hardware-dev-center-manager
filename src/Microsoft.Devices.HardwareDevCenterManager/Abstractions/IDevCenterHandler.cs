@@ -13,7 +13,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
     {
         Task<DevCenterResponse<bool>> CommitSubmission(string productId, string submissionId);
         Task<DevCenterResponse<bool>> CreateMetaData(string productId, string submissionId);
-        void Dispose();
         Task<DevCenterResponse<Audience>> GetAudiences();
         Task<DevCenterResponse<Submission>> GetPartnerSubmission(string publisherId, string productId, string submissionId);
         Task<DevCenterResponse<Product>> GetProducts(string productId = null);
