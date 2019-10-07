@@ -5,10 +5,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- task: MSBuild@1
+- task: DotNetCoreCLI@2
   inputs:
-    solution: '**/*.sln'
-    restoreNugetPackages: true
+    command: 'restore'
+    feedsToUse: 'select'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
 - task: NuGetCommand@2
   inputs:
     command: pack
