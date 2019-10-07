@@ -11,7 +11,9 @@
     <PackageId>Microsoft.Devices.HardwareDevCenterManager</PackageId>
     <PackageProjectUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</PackageProjectUrl>
     <RepositoryUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</RepositoryUrl>
-    <PackageLicenseExpression>https://github.com/microsoft/devices-hardware-dev-center-manager/blob/master/LICENSE</PackageLicenseExpression>
+    <LicenseUrl>https://github.com/microsoft/devices-hardware-dev-center-manager/blob/master/LICENSE</LicenseUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
