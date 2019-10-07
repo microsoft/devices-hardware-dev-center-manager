@@ -10,6 +10,7 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
     feedsToUse: 'select'
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
@@ -20,3 +21,10 @@ steps:
     command: 'pack'
     packagesToPack: '**/*.csproj'
     versionEnvVar: '$(packageVersion)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'Microsoft.Devices NuGet.Org Feed'
