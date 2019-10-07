@@ -19,5 +19,4 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '**/*.csproj'
-    versioningScheme: 'byEnvVar'
     versionEnvVar: '$(packageVersion)'
