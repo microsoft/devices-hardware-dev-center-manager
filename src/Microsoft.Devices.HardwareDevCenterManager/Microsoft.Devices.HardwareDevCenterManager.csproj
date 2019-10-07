@@ -6,9 +6,12 @@
     <Product>HardwareDevCenterManager API</Product>
     <Authors>Microsoft</Authors>
     <Description>Class library used in invoking HTTP requests to the Hardware Dev Center dashboard API</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.4</Version>
     <PackageId>Microsoft.Devices.HardwareDevCenterManager</PackageId>
+    <PackageProjectUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</RepositoryUrl>
+    <PackageLicenseExpression>https://github.com/microsoft/devices-hardware-dev-center-manager/blob/master/LICENSE</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
