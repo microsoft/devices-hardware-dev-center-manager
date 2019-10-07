@@ -14,7 +14,10 @@ steps:
   inputs:
     command: 'build'
     projects: '**/*.csproj'
-- task: NuGetCommand@2
+
+- task: DotNetCoreCLI@2
   inputs:
-    command: pack
+    command: 'pack'
     packagesToPack: '**/*.csproj'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: '$(packageVersion)'
