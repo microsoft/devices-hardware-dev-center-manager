@@ -1,0 +1,11 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    packagesToPack: '**/*.csproj'
