@@ -5,6 +5,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: MSBuild@1
+  inputs:
+    solution: '**/*.sln'
+    restoreNugetPackages: true
 - task: NuGetCommand@2
   inputs:
     command: pack
