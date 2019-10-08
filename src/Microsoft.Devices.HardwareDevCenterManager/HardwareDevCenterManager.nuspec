@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+		<id>Microsoft.Devices.HardwareDevCenterManager</id>
+		<version>1.0.4</version>
+		<authors>Microsoft</authors>
+		<owners>Microsoft</owners>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="file">LICENSE</license>
+		<projectUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</projectUrl>
+		<description>Class library used in invoking HTTP requests to the Hardware Dev Center dashboard API</description>
+		<copyright>© Microsoft Corporation. All rights reserved</copyright>
+		<repository url="https://github.com/microsoft/devices-hardware-dev-center-manager" />
+		<dependencies>
+		  <group targetFramework=".NETStandard2.0">
+			<dependency id="Microsoft.Azure.Storage.Blob" version="11.1.0" exclude="Build,Analyzers" />
+			<dependency id="Microsoft.Azure.Storage.File" version="11.1.0" exclude="Build,Analyzers" />
+			<dependency id="Microsoft.CSharp" version="4.6.0" exclude="Build,Analyzers" />
+			<dependency id="Microsoft.Extensions.Options" version="2.2.0" exclude="Build,Analyzers" />
+			<dependency id="Microsoft.IdentityModel.Clients.ActiveDirectory" version="5.2.2" exclude="Build,Analyzers" />
+			<dependency id="Newtonsoft.Json" version="12.0.2" exclude="Build,Analyzers" />
+			<dependency id="System.Dynamic.Runtime" version="4.3.0" exclude="Build,Analyzers" />
+		  </group>
+		</dependencies>
+    </metadata>
+	<files>
+		<file src="..\..\LICE*" target="" />
+	</files>
+</package>
