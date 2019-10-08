@@ -9,7 +9,7 @@
 		<license type="file">LICENSE</license>
 		<projectUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</projectUrl>
 		<description>Class library used in invoking HTTP requests to the Hardware Dev Center dashboard API</description>
-		<copyright>© Microsoft Corporation. All rights reserved</copyright>
+		<copyright>&#169; Microsoft Corporation. All rights reserved.</copyright>
 		<repository url="https://github.com/microsoft/devices-hardware-dev-center-manager" />
 		<dependencies>
 		  <group targetFramework=".NETStandard2.0">
