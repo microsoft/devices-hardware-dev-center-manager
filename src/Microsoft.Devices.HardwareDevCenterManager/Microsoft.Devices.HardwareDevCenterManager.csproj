@@ -14,7 +14,8 @@
     <LicenseUrl>https://github.com/microsoft/devices-hardware-dev-center-manager/blob/master/LICENSE</LicenseUrl>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Copyright>Microsoft</Copyright>
+    <Copyright>© Microsoft Corporation. All rights reserved</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
