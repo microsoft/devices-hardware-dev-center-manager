@@ -19,7 +19,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'src'
-    Contents: '**/*.nupkg'
+    Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
