@@ -17,8 +17,8 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(system.defaultWorkingDirectory)'
-    Contents: '**\bin\$(buildConfiguration)\netstandard2.0\**'
+    SourceFolder: 'src'
+    Contents: '**/*.dll'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
