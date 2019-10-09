@@ -4,11 +4,16 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  - name: buildConfiguration
+    value: 'Release'
+
 steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: '**/*.csproj'
+    arguments: '-c $(buildConfiguration)'
 
 - task: CopyFiles@2
   inputs:
