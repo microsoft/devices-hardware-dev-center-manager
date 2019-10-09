@@ -4,23 +4,20 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  - name: buildConfiguration
-    value: 'Release'
-
 steps:
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '-c $(buildConfiguration)'
+    command: 'pack'
+    packagesToPack: '**/*.csproj'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
 
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'src'
-    Contents: |
-     **/bin/**/*.dll
-     **/*.nuspec
+    Contents: '**/*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
