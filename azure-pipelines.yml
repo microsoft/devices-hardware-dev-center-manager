@@ -17,26 +17,26 @@ steps:
 - task: EsrpCodeSigning@1
   inputs:
     ConnectedServiceName: 'DSX ESRP'
-    FolderPath: 'src'
+    FolderPath: 
     Pattern: '*.dll,*.exe,*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
-          [
-                {
-                    "KeyCode" : "CP-401405",
-                    "OperationCode" : "NuGetSign",
-                    "Parameters" : {},
-                    "ToolName" : "sign",
-                    "ToolVersion" : "1.0"
-                },
-                {
-                    "KeyCode" : "CP-401405",
-                    "OperationCode" : "NuGetVerify",
-                    "Parameters" : {},
-                    "ToolName" : "sign",
-                    "ToolVersion" : "1.0"
-                }
-          ]
+      [
+            {
+                "KeyCode" : "CP-401405",
+                "OperationCode" : "NuGetSign",
+                "Parameters" : {},
+                "ToolName" : "sign",
+                "ToolVersion" : "1.0"
+            },
+            {
+                "KeyCode" : "CP-401405",
+                "OperationCode" : "NuGetVerify",
+                "Parameters" : {},
+                "ToolName" : "sign",
+                "ToolVersion" : "1.0"
+            }
+      ]
     SessionTimeout: '60'
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
