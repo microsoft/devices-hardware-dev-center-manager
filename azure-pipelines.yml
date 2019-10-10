@@ -21,8 +21,7 @@ steps:
     Pattern: '*.dll,*.exe,*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
-      "SigningInfo" : {
-          "Operations" : [
+          [
               {
                   "KeyCode" : "CP-230856",
                   "OperationCode" : "SigntoolSign",
@@ -43,7 +42,6 @@ steps:
                   "ToolVersion" : "1.0"
               }
           ]
-      }​
     SessionTimeout: '60'
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
