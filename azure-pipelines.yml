@@ -17,7 +17,7 @@ steps:
 - task: EsrpCodeSigning@1
   inputs:
     ConnectedServiceName: 'DSX ESRP'
-    FolderPath: '$(System.DefaultWorkingDirectory)/**/'
+    FolderPath: '$(System.DefaultWorkingDirectory)/**'
     Pattern: '*.dll,*.exe,*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
