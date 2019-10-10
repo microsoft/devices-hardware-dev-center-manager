@@ -21,22 +21,29 @@ steps:
     Pattern: '*.dll,*.exe,*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
-      [
-        {
-            "KeyCode" : "CP-401405",
-            "OperationCode" : "NuGetSign",
-            "Parameters" : {},
-            "ToolName" : "sign",
-            "ToolVersion" : "1.0"
-        },
-        {
-            "KeyCode" : "CP-401405",
-            "OperationCode" : "NuGetVerify",
-            "Parameters" : {},
-            "ToolName" : "sign",
-            "ToolVersion" : "1.0"
-        }
-      ]
+      "SigningInfo" : {
+          "Operations" : [
+              {
+                  "KeyCode" : "CP-230856",
+                  "OperationCode" : "SigntoolSign",
+                  "Parameters" : {
+                      "OpusName" : "Microsoft",
+                      "OpusInfo" : "http://www.microsoft.com",
+                      "PageHash" : "/NPH",
+                      "TimeStamp" : "/t \"http://ts2048.gtm.microsoft.com/TSS/AuthenticodeTS\""
+                  },
+                  "ToolName" : "sign",
+                  "ToolVersion" : "1.0"
+              },
+              {
+                  "KeyCode" : "CP-230856",
+                  "OperationCode" : "SigntoolVerify",
+                  "Parameters" : {},
+                  "ToolName" : "sign",
+                  "ToolVersion" : "1.0"
+              }
+          ]
+      }​
     SessionTimeout: '60'
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
