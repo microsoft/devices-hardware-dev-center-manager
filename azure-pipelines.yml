@@ -1,3 +1,5 @@
+name: $(Major).$(Minor).$(Patch).$(rev:.r)
+
 trigger:
 - master
 
@@ -48,10 +50,7 @@ steps:
     command: 'pack'
     packagesToPack: '**/*.csproj'
     nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
+    versioningScheme: 'byBuildNumber'
 
 - task: EsrpCodeSigning@1
   inputs:
