@@ -18,7 +18,7 @@ steps:
   inputs:
     ConnectedServiceName: 'DSX ESRP'
     FolderPath: 'src'
-    Pattern: '*.dll,*.exe,*.nupkg'
+    Pattern: '*.dll,*.exe,/bin/**/*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
       [
