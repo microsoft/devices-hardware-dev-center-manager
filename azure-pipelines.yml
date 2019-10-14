@@ -1,3 +1,5 @@
+name: $(Major).$(Minor)$(rev:.r)
+
 trigger:
 - master
 
@@ -7,18 +9,15 @@ pool:
 steps:
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'pack'
-    packagesToPack: '**/*.csproj'
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '$(Major)'
-    minorVersion: '$(Minor)'
-    patchVersion: '$(Patch)'
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '-c $(BuildConfiguration)'
 
 - task: EsrpCodeSigning@1
   inputs:
     ConnectedServiceName: 'DSX ESRP'
     FolderPath: 'src'
-    Pattern: '*.dll,*.exe,*.nupkg'
+    Pattern: '*.dll'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
       [
@@ -37,6 +36,40 @@ steps:
         {
             "KeyCode" : "CP-230856",
             "OperationCode" : "SigntoolVerify",
+            "Parameters" : {},
+            "ToolName" : "sign",
+            "ToolVersion" : "1.0"
+        }
+      ]
+    SessionTimeout: '60'
+    MaxConcurrency: '50'
+    MaxRetryAttempts: '5'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.csproj'
+    nobuild: true
+    versioningScheme: 'byBuildNumber'
+
+- task: EsrpCodeSigning@1
+  inputs:
+    ConnectedServiceName: 'DSX ESRP'
+    FolderPath: '$(Build.ArtifactStagingDirectory)'
+    Pattern: '*.nupkg'
+    signConfigType: 'inlineSignParams'
+    inlineOperation: |
+      [
+        {
+            "KeyCode" : "CP-401405",
+            "OperationCode" : "NuGetSign",
+            "Parameters" : {},
+            "ToolName" : "sign",
+            "ToolVersion" : "1.0"
+        },
+        {
+            "KeyCode" : "CP-401405",
+            "OperationCode" : "NuGetVerify",
             "Parameters" : {},
             "ToolName" : "sign",
             "ToolVersion" : "1.0"
