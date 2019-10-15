@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Company>Microsoft</Company>
-    <Product>HardwareDevCenterManager API</Product>
+    <Version>1.0.0</Version>
     <Authors>Microsoft</Authors>
     <Description>Class library used in invoking HTTP requests to the Hardware Dev Center dashboard API</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.4</Version>
-    <PackageId>Microsoft.Devices.HardwareDevCenterManager</PackageId>
+    <Copyright>&amp;#169; Microsoft Corporation. All rights reserved.</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +23,13 @@
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
