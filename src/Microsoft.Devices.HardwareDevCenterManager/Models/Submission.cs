@@ -22,6 +22,13 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("type")]
         public string Type { get; set; }
+        public enum SubmissionType
+        {
+            [JsonProperty("initial")]
+            Initial,
+            [JsonProperty("derived")]
+            Derived
+        }
 
         [JsonProperty("commitStatus")]
         public string CommitStatus { get; set; }

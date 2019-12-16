@@ -17,7 +17,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public string Message { get; set; }
 
         [JsonProperty("validationErrors")]
-        public List<DevCenterErrorValidationErrorEntry> ValidationErrors { get; set; }
+        public IList<DevCenterErrorValidationErrorEntry> ValidationErrors { get; set; }
 
         [JsonProperty("httpErrorCode")]
         public int? HttpErrorCode { get; set; }

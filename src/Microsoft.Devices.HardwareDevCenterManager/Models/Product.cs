@@ -66,6 +66,15 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         [JsonProperty("selectedProductTypes")]
         public Dictionary<string, string> SelectedProductTypes { get; set; }
 
+        [JsonProperty("isCommitted")]
+        public bool IsCommitted { get; set; }
+
+        [JsonProperty("isExtensionInf")]
+        public bool IsExtensionInf { get; set; }
+
+        [JsonProperty("isRetpolineCompiled")]
+        public bool IsRetpolineCompiled { get; set; }
+
         public void Dump()
         {
             Console.WriteLine("---- Product: " + Id);
@@ -76,6 +85,10 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         FWVer:     " + FirmwareVersion ?? "");
             Console.WriteLine("         isTestSign:" + IsTestSign ?? "");
             Console.WriteLine("         isFlightSign:" + IsFlightSign ?? "");
+            Console.WriteLine("         isCommitted:" + IsCommitted ?? "");
+            Console.WriteLine("         isExtensionInf:" + IsExtensionInf ?? "");
+            Console.WriteLine("         isRetpolineCompiled:" + IsRetpolineCompiled ?? "");
+
             Console.WriteLine("         createdBy: " + CreatedBy ?? "");
             Console.WriteLine("         updatedBy: " + UpdatedBy ?? "");
             Console.WriteLine("         createdDateTime:" + CreatedDateTime.ToString("s", CultureInfo.CurrentCulture));
@@ -107,7 +120,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 }
             }
 
-
             Console.WriteLine("         marketingNames: ");
             if (MarketingNames != null)
             {
@@ -116,10 +128,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     Console.WriteLine("                   " + sig);
                 }
             }
-
             Console.WriteLine();
         }
-
     }
 
     public class NewProduct

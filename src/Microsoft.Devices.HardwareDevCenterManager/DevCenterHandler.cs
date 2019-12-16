@@ -186,6 +186,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     HttpErrorCode = reterr.HttpErrorCode,
                     Code = reterr.StatusCode,
                     Message = reterr.Message,
+                    ValidationErrors = reterr.ValidationErrors,
                     Trace = trace
                 };
             }
