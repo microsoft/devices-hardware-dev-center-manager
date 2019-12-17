@@ -4,6 +4,7 @@
     Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
 --*/
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 {
@@ -20,5 +21,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("httpErrorCode")]
         public int? HttpErrorCode { get; set; }
+
+        [JsonProperty("validationErrors")]
+        public IList<DevCenterErrorValidationErrorEntry> ValidationErrors;
     }
 }
