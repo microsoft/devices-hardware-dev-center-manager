@@ -89,7 +89,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 client.Timeout = HttpTimeout;
                 Uri restApi = new Uri(uri);
 
-                if (!(HttpMethod.Get == method || HttpMethod.Post == method))
+                if (!(HttpMethod.Get == method || HttpMethod.Post == method || HttpMethod.Put == method))
                 {
                     return new DevCenterErrorDetails
                     {
@@ -117,6 +117,10 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                         {
                             StringContent postContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
                             infoResult = await client.PostAsync(restApi, postContent);
+                        }
+                        else if(HttpMethod.Put == method)
+                        {
+                            infoResult = await client.PutAsync(restApi, null);
                         }
                     }
                     catch (TaskCanceledException tcex)
@@ -450,6 +454,31 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     error == null
                 }
             };
+            return ret;
+        }
+
+
+        private const string DevCenterCancelShippingLabelUrl = "/hardware/products/{0}/submissions/{1}/shippingLabels/{2}/cancel";
+
+        /// <summary>
+        /// Requests cancellation of a shipping label 
+        /// </summary>
+        /// <returns>Dev Center Response with Boolean value indicating a successful call to cancel a the shipping label</returns>
+        public async Task<DevCenterResponse<bool>> CancelShippingLabel(string productId, string submissionId, string shippingLabelId)
+        {
+            string cancelShippingLabelUrl = GetDevCenterBaseUrl() +
+                string.Format(DevCenterCancelShippingLabelUrl, productId, submissionId, shippingLabelId);
+
+            DevCenterErrorDetails error = await InvokeHdcService(HttpMethod.Put, cancelShippingLabelUrl, null, null);
+            DevCenterResponse<bool> ret = new DevCenterResponse<bool>()
+            {
+                Error = error,
+                ReturnValue = new List<bool>()
+                {
+                    error == null
+                }
+            };
+
             return ret;
         }
 

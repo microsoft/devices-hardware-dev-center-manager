@@ -11,6 +11,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 {
     public interface IDevCenterHandler
     {
+        Task<DevCenterResponse<bool>> CancelShippingLabel(string productId, string submissionId, string shippingLabelId);
         Task<DevCenterResponse<bool>> CommitSubmission(string productId, string submissionId);
         Task<DevCenterResponse<bool>> CreateMetaData(string productId, string submissionId);
         Task<DevCenterResponse<Audience>> GetAudiences();
