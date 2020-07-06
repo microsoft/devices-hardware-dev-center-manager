@@ -67,13 +67,13 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public Dictionary<string, string> SelectedProductTypes { get; set; }
 
         [JsonProperty("isCommitted")]
-        public bool IsCommitted { get; set; }
-
-        [JsonProperty("isExtensionInf")]
-        public bool IsExtensionInf { get; set; }
+        public bool IsCommitted { get; set; }       
 
         [JsonProperty("isRetpolineCompiled")]
         public bool IsRetpolineCompiled { get; set; }
+
+        [JsonProperty("additionalAttributes")]
+        public AdditionalAttributes AdditionalAttributes { get; set; }
 
         public void Dump()
         {
@@ -85,8 +85,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         FWVer:     " + FirmwareVersion ?? "");
             Console.WriteLine("         isTestSign:" + IsTestSign ?? "");
             Console.WriteLine("         isFlightSign:" + IsFlightSign ?? "");
-            Console.WriteLine("         isCommitted:" + IsCommitted ?? "");
-            Console.WriteLine("         isExtensionInf:" + IsExtensionInf ?? "");
+            Console.WriteLine("         isCommitted:" + IsCommitted ?? "");            
             Console.WriteLine("         isRetpolineCompiled:" + IsRetpolineCompiled ?? "");
 
             Console.WriteLine("         createdBy: " + CreatedBy ?? "");
@@ -128,6 +127,30 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     Console.WriteLine("                   " + sig);
                 }
             }
+
+            Console.WriteLine("         additionalAttributes: ");
+            if (AdditionalAttributes != null)
+            {
+                Console.WriteLine("         storageController:");
+                Console.WriteLine("             usedProprietary:" + AdditionalAttributes.StorageController.UsedProprietary);
+                Console.WriteLine("             usedMicrosoft:" + AdditionalAttributes.StorageController.UsedMicrosoft);
+                Console.WriteLine("             usedBootSupport:" + AdditionalAttributes.StorageController.UsedBootSupport);
+                Console.WriteLine("             usedBetterBoot:" + AdditionalAttributes.StorageController.UsedBetterBoot);
+                Console.WriteLine("             supportsSector4K512E:" + AdditionalAttributes.StorageController.SupportsSector4K512E);
+                Console.WriteLine("             supportsSector4K4K:" + AdditionalAttributes.StorageController.SupportsSector4K4K);
+                Console.WriteLine("             supportsDifferential:" + AdditionalAttributes.StorageController.SupportsDifferential);
+
+                Console.WriteLine("         raidController:");
+                Console.WriteLine("             usedProprietary:" + AdditionalAttributes.RaidController.UsedProprietary);
+                Console.WriteLine("             usedMicrosoft:" + AdditionalAttributes.RaidController.UsedMicrosoft);
+                Console.WriteLine("             isThirdPartyNeeded:" + AdditionalAttributes.RaidController.IsThirdPartyNeeded);
+                Console.WriteLine("             isSES:" + AdditionalAttributes.RaidController.IsSES);
+                Console.WriteLine("             isSAFTE:" + AdditionalAttributes.RaidController.IsSAFTE);
+
+                Console.WriteLine("         svvp:");
+                Console.WriteLine("             maxProcessors:" + AdditionalAttributes.Svvp.MaxProcessors);
+                Console.WriteLine("             maxMemory:" + AdditionalAttributes.Svvp.MaxMemory);
+            }
             Console.WriteLine();
         }
     }
@@ -137,11 +160,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         [JsonProperty("productName")]
         public string ProductName { get; set; }
 
-        [JsonProperty("deviceType")]
-        public string DeviceType { get; set; }
-
-        [JsonProperty("requestedSignatures")]
-        public List<string> RequestedSignatures { get; set; }
+        [JsonProperty("testHarness")]
+        public string TestHarness { get; set; }
 
         [JsonProperty("announcementDate")]
         public DateTime AnnouncementDate { get; set; }
@@ -152,6 +172,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         [JsonProperty("firmwareVersion")]
         public string FirmwareVersion { get; set; }
 
+        [JsonProperty("deviceType")]
+        public string DeviceType { get; set; }
+
         [JsonProperty("isTestSign")]
         public bool IsTestSign { get; set; }
 
@@ -159,12 +182,19 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public bool IsFlightSign { get; set; }
 
         [JsonProperty("marketingNames")]
-        public List<string> MarketingNames { get; set; }
+        public List<string> MarketingNames { get; set; }        
 
         [JsonProperty("selectedProductTypes")]
         public Dictionary<string, string> SelectedProductTypes { get; set; }
 
-        [JsonProperty("testHarness")]
-        public string TestHarness { get; set; }
+        [JsonProperty("requestedSignatures")]
+        public List<string> RequestedSignatures { get; set; }
+
+        [JsonProperty("additionalAttributes")]
+        public AdditionalAttributes AdditionalAttributes { get; set; }
+
+        [JsonProperty("packageType")]
+        public string PackageType { get; set; }
+
     }
 }
