@@ -30,8 +30,18 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Derived
         }
 
+
         [JsonProperty("commitStatus")]
         public string CommitStatus { get; set; }
+        
+        [JsonProperty("isExtensionInf")]
+        public bool IsExtensionInf { get; set; }
+
+        [JsonProperty("isUniversal")]
+        public bool isUniversal { get; set; }
+
+        [JsonProperty("isDeclarativeInf")]
+        public bool isDeclarativeInf { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -55,6 +65,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         ProductId:   " + ProductId);
             Console.WriteLine("         type:        " + Type ?? "");
             Console.WriteLine("         commitStatus:" + CommitStatus ?? "");
+            Console.WriteLine("         isExtensionInf:" + IsExtensionInf ?? "");
+            Console.WriteLine("         isUniversal:" + isUniversal ?? "");
+            Console.WriteLine("         isDeclarativeInf:" + isDeclarativeInf ?? "");
             Console.WriteLine("         CreatedBy:   " + CreatedBy ?? "");
             Console.WriteLine("         CreateTime:  " + CreatedDateTime ?? "");
             Console.WriteLine("         Links:");
