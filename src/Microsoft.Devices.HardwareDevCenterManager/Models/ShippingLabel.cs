@@ -23,6 +23,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         [JsonProperty("publishingSpecifications")]
         public PublishingSpecifications PublishingSpecifications { get; set; }
 
+        [JsonProperty("targeting")]
+        public Targeting Targeting { get; set; }
+
         [JsonProperty("workflowStatus")]
         public WorkflowStatus WorkflowStatus { get; set; }
 
@@ -41,6 +44,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         Name:        " + Name);
             Console.WriteLine("         ProductId:   " + ProductId);
             Console.WriteLine("         SubmissionId:" + SubmissionId);
+            Console.WriteLine("         Destination:" + Destination);
 
             Console.WriteLine("         Publishing Specifications:");
             if (PublishingSpecifications != null)
@@ -65,6 +69,37 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 }
             }
 
+            Console.WriteLine("         Targeting:");
+            if (Targeting != null)
+            {
+                Console.WriteLine("           hardwareIds:" + Targeting.HardwareIds);
+                foreach (HardwareId hid in Targeting.HardwareIds)
+                {
+                    Console.WriteLine("           bundledId:" + hid.BundleId);
+                    Console.WriteLine("           infId:" + hid.InfId);
+                    Console.WriteLine("           operatingSystemCode:" + hid.OperatingSystemCode);
+                    Console.WriteLine("           pnpString:" + hid.PnpString);
+                    Console.WriteLine("           distributionsState:" + hid.DistributionState);
+                }
+                Console.WriteLine("           chids:" + Targeting.Chids);
+                foreach (CHID chid in Targeting.Chids)
+                {
+                    Console.WriteLine("           chid:" + chid.Chid);
+                    Console.WriteLine("           distributionState:" + chid.DistributionState);
+                }
+                Console.WriteLine("           restrictedToAudiences:" + Targeting.RestrictedToAudiences);
+                foreach (string audience in Targeting.RestrictedToAudiences)
+                {
+                    Console.WriteLine("           " + audience);
+                }
+                Console.WriteLine("           inServicePublishInfo:" + Targeting.RestrictedToAudiences);
+                Console.WriteLine("               flooring:" + Targeting.InServicePublishInfo.Flooring);
+                Console.WriteLine("               ceiling:" + Targeting.InServicePublishInfo.Ceiling);
+                Console.WriteLine("           coEngDriverPublishInfo:" + Targeting.CoEngDriverPublishInfo);
+                Console.WriteLine("               flooringBuildNumber:" + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
+                Console.WriteLine("               ceilingBuildNumber:" + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
+            }
+           
             Console.WriteLine("         Links:");
             if (Links != null)
             {
@@ -73,6 +108,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     link.Dump();
                 }
             }
+            
             Console.WriteLine("         Status:");
             if (WorkflowStatus != null)
             {
