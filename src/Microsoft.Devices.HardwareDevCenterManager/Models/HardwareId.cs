@@ -20,5 +20,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("pnpString")]
         public string PnpString { get; set; }
+
+        [JsonProperty("distributionState")]
+        public string DistributionState { get; set; }
     }
 }
