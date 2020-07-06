@@ -9,10 +9,11 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 {
     public class CHID
     {
+        [JsonProperty("chid")]
+        public string Chid { get; set; }
+
         [JsonProperty("distributionState")]
         public string DistributionState { get; set; }
 
-        [JsonProperty("chid")]
-        public string Chid { get; set; }
     }
 }
