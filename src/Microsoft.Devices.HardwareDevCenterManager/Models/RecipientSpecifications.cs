@@ -11,6 +11,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
     {
         [JsonProperty("receiverPublisherId")]
         public string ReceiverPublisherId { get; set; }
+
         [JsonProperty("enforceChidTargeting")]
         public bool EnforceChidTargeting { get; set; }
     }
