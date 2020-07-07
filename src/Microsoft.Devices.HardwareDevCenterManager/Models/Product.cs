@@ -78,30 +78,30 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public void Dump()
         {
             Console.WriteLine("---- Product: " + Id);
-            Console.WriteLine("         Name:      " + ProductName ?? "");
-            Console.WriteLine("         Shared Id: " + SharedProductId ?? "");
-            Console.WriteLine("         Type:      " + ProductType ?? "");
-            Console.WriteLine("         DevType:   " + DeviceType ?? "");
-            Console.WriteLine("         FWVer:     " + FirmwareVersion ?? "");
-            Console.WriteLine("         isTestSign:" + IsTestSign ?? "");
-            Console.WriteLine("         isFlightSign:" + IsFlightSign ?? "");
-            Console.WriteLine("         isCommitted:" + IsCommitted ?? "");            
-            Console.WriteLine("         isRetpolineCompiled:" + IsRetpolineCompiled ?? "");
+            Console.WriteLine("         Name:         " + ProductName ?? "");
+            Console.WriteLine("         Shared Id:    " + SharedProductId ?? "");
+            Console.WriteLine("         Type:         " + ProductType ?? "");
+            Console.WriteLine("         DevType:      " + DeviceType ?? "");
+            Console.WriteLine("         FWVer:        " + FirmwareVersion ?? "");
+            Console.WriteLine("         isTestSign:   " + IsTestSign ?? "");
+            Console.WriteLine("         isFlightSign: " + IsFlightSign ?? "");
+            Console.WriteLine("         isCommitted:  " + IsCommitted ?? "");            
+            Console.WriteLine("         isRetpolineCompiled: " + IsRetpolineCompiled ?? "");
 
             Console.WriteLine("         createdBy: " + CreatedBy ?? "");
             Console.WriteLine("         updatedBy: " + UpdatedBy ?? "");
-            Console.WriteLine("         createdDateTime:" + CreatedDateTime.ToString("s", CultureInfo.CurrentCulture));
-            Console.WriteLine("         updatedDateTime:" + UpdatedDateTime.ToString("s", CultureInfo.CurrentCulture));
-            Console.WriteLine("         announcementDate:" + AnnouncementDate.ToString("s", CultureInfo.CurrentCulture));
-            Console.WriteLine("         testHarness:" + TestHarness ?? "");
+            Console.WriteLine("         createdDateTime:  " + CreatedDateTime.ToString("s", CultureInfo.CurrentCulture));
+            Console.WriteLine("         updatedDateTime:  " + UpdatedDateTime.ToString("s", CultureInfo.CurrentCulture));
+            Console.WriteLine("         announcementDate: " + AnnouncementDate.ToString("s", CultureInfo.CurrentCulture));
+            Console.WriteLine("         testHarness: " + TestHarness ?? "");
 
-            Console.WriteLine("         Signatures: ");
+            Console.WriteLine("         Signatures:");
             foreach (string sig in RequestedSignatures)
             {
                 Console.WriteLine("                   " + sig);
             }
 
-            Console.WriteLine("         deviceMetadataIds: ");
+            Console.WriteLine("         deviceMetadataIds:");
             if (DeviceMetadataIds != null)
             {
 
@@ -110,16 +110,16 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     Console.WriteLine("                   " + sig);
                 }
             }
-            Console.WriteLine("         selectedProductTypes: ");
+            Console.WriteLine("         selectedProductTypes:");
             if (SelectedProductTypes != null)
             {
                 foreach (KeyValuePair<string, string> entry in SelectedProductTypes)
                 {
-                    Console.WriteLine("                   " + entry.Key + ":" + entry.Value);
+                    Console.WriteLine("                   " + entry.Key + ": " + entry.Value);
                 }
             }
 
-            Console.WriteLine("         marketingNames: ");
+            Console.WriteLine("         marketingNames:");
             if (MarketingNames != null)
             {
                 foreach (string sig in MarketingNames)
@@ -128,28 +128,28 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 }
             }
 
-            Console.WriteLine("         additionalAttributes: ");
+            Console.WriteLine("         additionalAttributes:");
             if (AdditionalAttributes != null)
             {
                 Console.WriteLine("         storageController:");
-                Console.WriteLine("             usedProprietary:" + AdditionalAttributes.StorageController.UsedProprietary);
-                Console.WriteLine("             usedMicrosoft:" + AdditionalAttributes.StorageController.UsedMicrosoft);
-                Console.WriteLine("             usedBootSupport:" + AdditionalAttributes.StorageController.UsedBootSupport);
-                Console.WriteLine("             usedBetterBoot:" + AdditionalAttributes.StorageController.UsedBetterBoot);
-                Console.WriteLine("             supportsSector4K512E:" + AdditionalAttributes.StorageController.SupportsSector4K512E);
-                Console.WriteLine("             supportsSector4K4K:" + AdditionalAttributes.StorageController.SupportsSector4K4K);
-                Console.WriteLine("             supportsDifferential:" + AdditionalAttributes.StorageController.SupportsDifferential);
+                Console.WriteLine("             usedProprietary:    " + AdditionalAttributes.StorageController.UsedProprietary);
+                Console.WriteLine("             usedMicrosoft:      " + AdditionalAttributes.StorageController.UsedMicrosoft);
+                Console.WriteLine("             usedBootSupport:    " + AdditionalAttributes.StorageController.UsedBootSupport);
+                Console.WriteLine("             usedBetterBoot:     " + AdditionalAttributes.StorageController.UsedBetterBoot);
+                Console.WriteLine("             supportsSector4K512E: " + AdditionalAttributes.StorageController.SupportsSector4K512E);
+                Console.WriteLine("             supportsSector4K4K:   " + AdditionalAttributes.StorageController.SupportsSector4K4K);
+                Console.WriteLine("             supportsDifferential: " + AdditionalAttributes.StorageController.SupportsDifferential);
 
                 Console.WriteLine("         raidController:");
-                Console.WriteLine("             usedProprietary:" + AdditionalAttributes.RaidController.UsedProprietary);
-                Console.WriteLine("             usedMicrosoft:" + AdditionalAttributes.RaidController.UsedMicrosoft);
-                Console.WriteLine("             isThirdPartyNeeded:" + AdditionalAttributes.RaidController.IsThirdPartyNeeded);
-                Console.WriteLine("             isSES:" + AdditionalAttributes.RaidController.IsSES);
-                Console.WriteLine("             isSAFTE:" + AdditionalAttributes.RaidController.IsSAFTE);
+                Console.WriteLine("             usedProprietary: " + AdditionalAttributes.RaidController.UsedProprietary);
+                Console.WriteLine("             usedMicrosoft:   " + AdditionalAttributes.RaidController.UsedMicrosoft);
+                Console.WriteLine("             isThirdPartyNeeded: " + AdditionalAttributes.RaidController.IsThirdPartyNeeded);
+                Console.WriteLine("             isSES:   " + AdditionalAttributes.RaidController.IsSES);
+                Console.WriteLine("             isSAFTE: " + AdditionalAttributes.RaidController.IsSAFTE);
 
                 Console.WriteLine("         svvp:");
-                Console.WriteLine("             maxProcessors:" + AdditionalAttributes.Svvp.MaxProcessors);
-                Console.WriteLine("             maxMemory:" + AdditionalAttributes.Svvp.MaxMemory);
+                Console.WriteLine("             maxProcessors: " + AdditionalAttributes.Svvp.MaxProcessors);
+                Console.WriteLine("             maxMemory:     " + AdditionalAttributes.Svvp.MaxMemory);
             }
             Console.WriteLine();
         }
@@ -195,6 +195,5 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("packageType")]
         public string PackageType { get; set; }
-
     }
 }

@@ -17,6 +17,5 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("svvp")]
         public Svvp Svvp { get; set; }
-
     }
 }

@@ -39,16 +39,16 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         {
             foreach (Item item in Items)
             {
-                Console.WriteLine("               - url: " + item.Url);
-                Console.WriteLine("               - type:" + item.Type);
+                Console.WriteLine("               - url:  " + item.Url);
+                Console.WriteLine("               - type: " + item.Type);
             }
-            Console.WriteLine("               - messages: ");
+            Console.WriteLine("               - messages:");
 
             if (Messages != null)
             {
                 foreach (string msg in Messages)
                 {
-                    Console.WriteLine("                 " + msg);
+                    Console.WriteLine("                   " + msg);
                 }
             }
         }

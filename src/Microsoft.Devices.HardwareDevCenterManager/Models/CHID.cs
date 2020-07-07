@@ -14,6 +14,5 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("distributionState")]
         public string DistributionState { get; set; }
-
     }
 }

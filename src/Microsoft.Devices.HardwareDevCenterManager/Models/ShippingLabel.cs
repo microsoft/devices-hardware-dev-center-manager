@@ -40,28 +40,28 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         public async void Dump()
         {
-            Console.WriteLine("---- Shipping Label: " + Id);
+            Console.WriteLine("---- Shipping Label:  " + Id);
             Console.WriteLine("         Name:        " + Name);
             Console.WriteLine("         ProductId:   " + ProductId);
-            Console.WriteLine("         SubmissionId:" + SubmissionId);
-            Console.WriteLine("         Destination:" + Destination);
+            Console.WriteLine("         SubmissionId: " + SubmissionId);
+            Console.WriteLine("         Destination: " + Destination);
 
             Console.WriteLine("         Publishing Specifications:");
             if (PublishingSpecifications != null)
             {
-                Console.WriteLine("           publishToWindows10s:" + PublishingSpecifications.PublishToWindows10S);
-                Console.WriteLine("           isDisclosureRestricted:" + PublishingSpecifications.IsDisclosureRestricted);
-                Console.WriteLine("           isAutoInstallOnApplicableSystems:" + PublishingSpecifications.IsAutoInstallOnApplicableSystems);
-                Console.WriteLine("           isAutoInstallDuringOSUpgrade:" + PublishingSpecifications.IsAutoInstallDuringOSUpgrade);
-                Console.WriteLine("           goLiveDate:" + PublishingSpecifications.GoLiveDate);
+                Console.WriteLine("           publishToWindows10s:    " + PublishingSpecifications.PublishToWindows10S);
+                Console.WriteLine("           isDisclosureRestricted: " + PublishingSpecifications.IsDisclosureRestricted);
+                Console.WriteLine("           isAutoInstallOnApplicableSystems: " + PublishingSpecifications.IsAutoInstallOnApplicableSystems);
+                Console.WriteLine("           isAutoInstallDuringOSUpgrade:     " + PublishingSpecifications.IsAutoInstallDuringOSUpgrade);
+                Console.WriteLine("           goLiveDate:             " + PublishingSpecifications.GoLiveDate);
                 Console.WriteLine("           additionalInfoForMsApproval:");
-                Console.WriteLine("               businessJustification:" + PublishingSpecifications.AdditionalInfoForMsApproval.BusinessJustification);
-                Console.WriteLine("               hasUiSoftware:" + PublishingSpecifications.AdditionalInfoForMsApproval.HasUiSoftware);
-                Console.WriteLine("               isCoEngineered:" + PublishingSpecifications.AdditionalInfoForMsApproval.IsCoEngineered);
-                Console.WriteLine("               isForUnreleasedHardware:" + PublishingSpecifications.AdditionalInfoForMsApproval.IsForUnreleasedHardware);
-                Console.WriteLine("               isRebootRequired:" + PublishingSpecifications.AdditionalInfoForMsApproval.IsRebootRequired);
-                Console.WriteLine("               microsoftContact:" + PublishingSpecifications.AdditionalInfoForMsApproval.MicrosoftContact);
-                Console.WriteLine("               validationsPerformed:" + PublishingSpecifications.AdditionalInfoForMsApproval.ValidationsPerformed);
+                Console.WriteLine("               businessJustification: " + PublishingSpecifications.AdditionalInfoForMsApproval.BusinessJustification);
+                Console.WriteLine("               hasUiSoftware:         " + PublishingSpecifications.AdditionalInfoForMsApproval.HasUiSoftware);
+                Console.WriteLine("               isCoEngineered:        " + PublishingSpecifications.AdditionalInfoForMsApproval.IsCoEngineered);
+                Console.WriteLine("               isForUnreleasedHardware: " + PublishingSpecifications.AdditionalInfoForMsApproval.IsForUnreleasedHardware);
+                Console.WriteLine("               isRebootRequired:      " + PublishingSpecifications.AdditionalInfoForMsApproval.IsRebootRequired);
+                Console.WriteLine("               microsoftContact:      " + PublishingSpecifications.AdditionalInfoForMsApproval.MicrosoftContact);
+                Console.WriteLine("               validationsPerformed:  " + PublishingSpecifications.AdditionalInfoForMsApproval.ValidationsPerformed);
                 Console.WriteLine("               affectedOems:");
                 foreach (string oem in PublishingSpecifications.AdditionalInfoForMsApproval.AffectedOems)
                 {
@@ -72,32 +72,32 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         Targeting:");
             if (Targeting != null)
             {
-                Console.WriteLine("           hardwareIds:" + Targeting.HardwareIds);
+                Console.WriteLine("           hardwareIds:");
                 foreach (HardwareId hid in Targeting.HardwareIds)
                 {
-                    Console.WriteLine("           bundledId:" + hid.BundleId);
-                    Console.WriteLine("           infId:" + hid.InfId);
-                    Console.WriteLine("           operatingSystemCode:" + hid.OperatingSystemCode);
-                    Console.WriteLine("           pnpString:" + hid.PnpString);
-                    Console.WriteLine("           distributionsState:" + hid.DistributionState);
+                    Console.WriteLine("           bundledId: " + hid.BundleId);
+                    Console.WriteLine("           infId:     " + hid.InfId);
+                    Console.WriteLine("           operatingSystemCode: " + hid.OperatingSystemCode);
+                    Console.WriteLine("           pnpString: " + hid.PnpString);
+                    Console.WriteLine("           distributionsState:  " + hid.DistributionState);
                 }
-                Console.WriteLine("           chids:" + Targeting.Chids);
+                Console.WriteLine("           chids:");
                 foreach (CHID chid in Targeting.Chids)
                 {
-                    Console.WriteLine("           chid:" + chid.Chid);
-                    Console.WriteLine("           distributionState:" + chid.DistributionState);
+                    Console.WriteLine("           chid: " + chid.Chid);
+                    Console.WriteLine("           distributionState: " + chid.DistributionState);
                 }
-                Console.WriteLine("           restrictedToAudiences:" + Targeting.RestrictedToAudiences);
+                Console.WriteLine("           restrictedToAudiences:");
                 foreach (string audience in Targeting.RestrictedToAudiences)
                 {
                     Console.WriteLine("           " + audience);
                 }
-                Console.WriteLine("           inServicePublishInfo:" + Targeting.RestrictedToAudiences);
-                Console.WriteLine("               flooring:" + Targeting.InServicePublishInfo.Flooring);
-                Console.WriteLine("               ceiling:" + Targeting.InServicePublishInfo.Ceiling);
-                Console.WriteLine("           coEngDriverPublishInfo:" + Targeting.CoEngDriverPublishInfo);
-                Console.WriteLine("               flooringBuildNumber:" + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
-                Console.WriteLine("               ceilingBuildNumber:" + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
+                Console.WriteLine("           inServicePublishInfo:");
+                Console.WriteLine("               flooring: " + Targeting.InServicePublishInfo.Flooring);
+                Console.WriteLine("               ceiling:  " + Targeting.InServicePublishInfo.Ceiling);
+                Console.WriteLine("           coEngDriverPublishInfo:");
+                Console.WriteLine("               flooringBuildNumber: " + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
+                Console.WriteLine("               ceilingBuildNumber:  " + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
             }
            
             Console.WriteLine("         Links:");
