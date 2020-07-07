@@ -37,10 +37,10 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public bool IsExtensionInf { get; set; }
 
         [JsonProperty("isUniversal")]
-        public bool isUniversal { get; set; }
+        public bool IsUniversal { get; set; }
 
         [JsonProperty("isDeclarativeInf")]
-        public bool isDeclarativeInf { get; set; }
+        public bool IsDeclarativeInf { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -65,8 +65,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         type:           " + Type ?? "");
             Console.WriteLine("         commitStatus:   " + CommitStatus ?? "");
             Console.WriteLine("         isExtensionInf: " + IsExtensionInf ?? "");
-            Console.WriteLine("         isUniversal:    " + isUniversal ?? "");
-            Console.WriteLine("         isDeclarativeInf: " + isDeclarativeInf ?? "");
+            Console.WriteLine("         isUniversal:    " + IsUniversal ?? "");
+            Console.WriteLine("         isDeclarativeInf: " + IsDeclarativeInf ?? "");
             Console.WriteLine("         CreatedBy:      " + CreatedBy ?? "");
             Console.WriteLine("         CreateTime:     " + CreatedDateTime ?? "");
             Console.WriteLine("         Links:");
