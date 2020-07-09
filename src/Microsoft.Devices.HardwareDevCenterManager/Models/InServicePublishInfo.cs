@@ -11,6 +11,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
     {
         [JsonProperty("flooring")]
         public string Flooring { get; set; }
+
         [JsonProperty("ceiling")]
         public string Ceiling { get; set; }
     }

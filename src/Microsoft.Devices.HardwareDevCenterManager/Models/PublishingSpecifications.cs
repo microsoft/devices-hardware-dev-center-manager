@@ -23,6 +23,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         [JsonProperty("isAutoInstallOnApplicableSystems")]
         public bool IsAutoInstallOnApplicableSystems { get; set; }
 
+        [JsonProperty("manualAcquisition")]
+        public bool ManualAcquisition { get; set; }
+
         [JsonProperty("isDisclosureRestricted")]
         public bool IsDisclosureRestricted { get; set; }
 

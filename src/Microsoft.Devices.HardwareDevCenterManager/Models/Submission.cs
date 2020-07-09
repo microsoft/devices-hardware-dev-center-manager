@@ -32,6 +32,15 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("commitStatus")]
         public string CommitStatus { get; set; }
+        
+        [JsonProperty("isExtensionInf")]
+        public bool IsExtensionInf { get; set; }
+
+        [JsonProperty("isUniversal")]
+        public bool IsUniversal { get; set; }
+
+        [JsonProperty("isDeclarativeInf")]
+        public bool IsDeclarativeInf { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -51,12 +60,15 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public async void Dump()
         {
             Console.WriteLine("---- Submission: " + Id);
-            Console.WriteLine("         Name:        " + Name);
-            Console.WriteLine("         ProductId:   " + ProductId);
-            Console.WriteLine("         type:        " + Type ?? "");
-            Console.WriteLine("         commitStatus:" + CommitStatus ?? "");
-            Console.WriteLine("         CreatedBy:   " + CreatedBy ?? "");
-            Console.WriteLine("         CreateTime:  " + CreatedDateTime ?? "");
+            Console.WriteLine("         Name:           " + Name);
+            Console.WriteLine("         ProductId:      " + ProductId);
+            Console.WriteLine("         type:           " + Type ?? "");
+            Console.WriteLine("         commitStatus:   " + CommitStatus ?? "");
+            Console.WriteLine("         isExtensionInf: " + IsExtensionInf ?? "");
+            Console.WriteLine("         isUniversal:    " + IsUniversal ?? "");
+            Console.WriteLine("         isDeclarativeInf: " + IsDeclarativeInf ?? "");
+            Console.WriteLine("         CreatedBy:      " + CreatedBy ?? "");
+            Console.WriteLine("         CreateTime:     " + CreatedDateTime ?? "");
             Console.WriteLine("         Links:");
             if (Links != null)
             {
@@ -71,7 +83,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 await WorkflowStatus.Dump();
             }
             Console.WriteLine("         Downloads:");
-            Console.WriteLine("               - messages: ");
+            Console.WriteLine("               - messages:");
             if (Downloads != null)
             {
                 Downloads.Dump();

@@ -21,5 +21,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("inServicePublishInfo")]
         public InServicePublishInfo InServicePublishInfo { get; set; }
+
+        [JsonProperty("coEngDriverPublishInfo")]
+        public CoEngDriverPublishInfo CoEngDriverPublishInfo { get; set; }
     }
 }

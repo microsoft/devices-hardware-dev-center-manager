@@ -31,7 +31,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("---- Audience: " + Id);
             Console.WriteLine("         audienceName: " + AudienceName);
             Console.WriteLine("         description:  " + Description);
-            Console.WriteLine("         name:        " + Name);
+            Console.WriteLine("         name:         " + Name);
             Console.WriteLine("         Links:");
             if (Links != null)
             {
@@ -42,5 +42,4 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             }
         }
     }
-
 }
