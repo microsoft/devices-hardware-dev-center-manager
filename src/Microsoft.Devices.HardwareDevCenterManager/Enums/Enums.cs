@@ -20,6 +20,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         [Description("NineteenH1")]
         [Display(Name = "19H1")]
         RS6_19H1,
+        VB,
+        MN,
         // Keep this at the end
         Invalid
     }
