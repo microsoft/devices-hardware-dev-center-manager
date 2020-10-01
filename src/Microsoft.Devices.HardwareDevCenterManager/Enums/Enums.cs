@@ -18,7 +18,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         RS4,
         RS5,
         NineteenH1,
-        RS6_19H1,
         VB,
         MN,
         Invalid
