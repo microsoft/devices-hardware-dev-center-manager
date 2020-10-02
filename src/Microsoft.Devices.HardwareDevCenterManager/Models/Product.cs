@@ -131,25 +131,34 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         additionalAttributes:");
             if (AdditionalAttributes != null)
             {
-                Console.WriteLine("         storageController:");
-                Console.WriteLine("             usedProprietary:    " + AdditionalAttributes.StorageController.UsedProprietary);
-                Console.WriteLine("             usedMicrosoft:      " + AdditionalAttributes.StorageController.UsedMicrosoft);
-                Console.WriteLine("             usedBootSupport:    " + AdditionalAttributes.StorageController.UsedBootSupport);
-                Console.WriteLine("             usedBetterBoot:     " + AdditionalAttributes.StorageController.UsedBetterBoot);
-                Console.WriteLine("             supportsSector4K512E: " + AdditionalAttributes.StorageController.SupportsSector4K512E);
-                Console.WriteLine("             supportsSector4K4K:   " + AdditionalAttributes.StorageController.SupportsSector4K4K);
-                Console.WriteLine("             supportsDifferential: " + AdditionalAttributes.StorageController.SupportsDifferential);
+                if (AdditionalAttributes.StorageController != null)
+                {
+                    Console.WriteLine("         storageController:");
+                    Console.WriteLine("             usedProprietary:    " + AdditionalAttributes.StorageController.UsedProprietary);
+                    Console.WriteLine("             usedMicrosoft:      " + AdditionalAttributes.StorageController.UsedMicrosoft);
+                    Console.WriteLine("             usedBootSupport:    " + AdditionalAttributes.StorageController.UsedBootSupport);
+                    Console.WriteLine("             usedBetterBoot:     " + AdditionalAttributes.StorageController.UsedBetterBoot);
+                    Console.WriteLine("             supportsSector4K512E: " + AdditionalAttributes.StorageController.SupportsSector4K512E);
+                    Console.WriteLine("             supportsSector4K4K:   " + AdditionalAttributes.StorageController.SupportsSector4K4K);
+                    Console.WriteLine("             supportsDifferential: " + AdditionalAttributes.StorageController.SupportsDifferential);
+                }
 
-                Console.WriteLine("         raidController:");
-                Console.WriteLine("             usedProprietary: " + AdditionalAttributes.RaidController.UsedProprietary);
-                Console.WriteLine("             usedMicrosoft:   " + AdditionalAttributes.RaidController.UsedMicrosoft);
-                Console.WriteLine("             isThirdPartyNeeded: " + AdditionalAttributes.RaidController.IsThirdPartyNeeded);
-                Console.WriteLine("             isSES:   " + AdditionalAttributes.RaidController.IsSES);
-                Console.WriteLine("             isSAFTE: " + AdditionalAttributes.RaidController.IsSAFTE);
+                if (AdditionalAttributes.RaidController != null)
+                {
+                    Console.WriteLine("         raidController:");
+                    Console.WriteLine("             usedProprietary: " + AdditionalAttributes.RaidController.UsedProprietary);
+                    Console.WriteLine("             usedMicrosoft:   " + AdditionalAttributes.RaidController.UsedMicrosoft);
+                    Console.WriteLine("             isThirdPartyNeeded: " + AdditionalAttributes.RaidController.IsThirdPartyNeeded);
+                    Console.WriteLine("             isSES:   " + AdditionalAttributes.RaidController.IsSES);
+                    Console.WriteLine("             isSAFTE: " + AdditionalAttributes.RaidController.IsSAFTE);
+                }
 
-                Console.WriteLine("         svvp:");
-                Console.WriteLine("             maxProcessors: " + AdditionalAttributes.Svvp.MaxProcessors);
-                Console.WriteLine("             maxMemory:     " + AdditionalAttributes.Svvp.MaxMemory);
+                if (AdditionalAttributes.Svvp != null)
+                {
+                    Console.WriteLine("         svvp:");
+                    Console.WriteLine("             maxProcessors: " + AdditionalAttributes.Svvp.MaxProcessors);
+                    Console.WriteLine("             maxMemory:     " + AdditionalAttributes.Svvp.MaxMemory);
+                }
             }
             Console.WriteLine();
         }

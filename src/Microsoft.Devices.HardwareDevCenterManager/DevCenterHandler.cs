@@ -335,7 +335,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             return await HdcGet<Submission>(getProductSubmissionUrl, string.IsNullOrEmpty(submissionId));
         }
 
-
         private const string DevCenterProductSubmissionCommitUrl = "/hardware/products/{0}/submissions/{1}/commit";
         /// <summary>
         /// Commits a Submission in HWDC
@@ -418,7 +417,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 getShippingLabelUrl += "/" + Uri.EscapeDataString(shippingLabelId);
             }
 
-            getShippingLabelUrl += @"?includeTargetingInfo=true";
+            getShippingLabelUrl += "?includeTargetingInfo=true";
             return await HdcGet<ShippingLabel>(getShippingLabelUrl, isMany);
         }
 
@@ -433,7 +432,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             string getAudienceUrl = GetDevCenterBaseUrl() + DevCenterAudienceUrl;
             return await HdcGet<Audience>(getAudienceUrl, true);
         }
-
 
         private const string DevCenterCreateMetaDataUrl = "/hardware/products/{0}/submissions/{1}/createpublishermetadata";
 
@@ -461,7 +459,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         private const string DevCenterCancelShippingLabelUrl = "/hardware/products/{0}/submissions/{1}/shippingLabels/{2}/cancel";
 
         /// <summary>
-        /// Requests cancellation of a shipping label 
+        /// Requests cancellation of a shipping label
         /// </summary>
         /// <returns>Dev Center Response with Boolean value indicating a successful call to cancel a the shipping label</returns>
         public async Task<DevCenterResponse<bool>> CancelShippingLabel(string productId, string submissionId, string shippingLabelId)
