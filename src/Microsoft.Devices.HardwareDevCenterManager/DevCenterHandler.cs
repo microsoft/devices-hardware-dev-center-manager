@@ -138,6 +138,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     }
 
                     string content = await infoResult.Content.ReadAsStringAsync();
+
                     if (infoResult.IsSuccessStatusCode)
                     {
                         processContent?.Invoke(content);
@@ -182,12 +183,16 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
                 if (reterr.Error != null)
                 {
+                    // include addtional error details if missing from deserialization
+                    reterr.Error.HttpErrorCode = (int)infoResult.StatusCode;
+                    reterr.Error.Trace = trace;
+
                     return reterr.Error;
                 }
 
                 return new DevCenterErrorDetails
                 {
-                    HttpErrorCode = reterr.HttpErrorCode,
+                    HttpErrorCode = (int)infoResult.StatusCode,
                     Code = reterr.StatusCode,
                     Message = reterr.Message,
                     ValidationErrors = reterr.ValidationErrors,
