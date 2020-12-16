@@ -4,7 +4,6 @@
     Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
 --*/
 using Microsoft.Devices.HardwareDevCenterManager.Utility;
-using Microsoft.Devices.HardwareDevCenterManager;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,8 +18,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         private readonly DelegatingHandler AuthHandler;
         private readonly AuthorizationHandlerCredentials AuthCredentials;
         private readonly TimeSpan HttpTimeout;
-        private const int MAX_RETRIES = 10;
-        private readonly int RequestDelayMs;
         private Guid CorrelationId;
         private readonly LastCommandDelegate LastCommand;
 
@@ -34,7 +31,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             AuthCredentials = credentials;
             AuthHandler = new AuthorizationHandler(AuthCredentials, options.HttpTimeoutSeconds);
             HttpTimeout = TimeSpan.FromSeconds(options.HttpTimeoutSeconds);
-            RequestDelayMs = options.RequestDelayMs;
             CorrelationId = options.CorrelationId;
             LastCommand = options.LastCommand;
         }
@@ -62,13 +58,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public async Task<DevCenterErrorDetails> InvokeHdcService(
             HttpMethod method, string uri, object input, Action<string> processContent)
         {
-            int retries = 0;
             DevCenterErrorReturn reterr = null;
             string RequestId = Guid.NewGuid().ToString();
             string json = JsonConvert.SerializeObject(input ?? new object());
-
-            //Wait RequestDelayMs ms per request to help with throttling
-            await Task.Delay(RequestDelayMs);
 
             using (HttpClient client = new HttpClient(AuthHandler, false))
             {
@@ -102,83 +94,67 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
                 HttpResponseMessage infoResult = null;
 
-                while (retries < MAX_RETRIES)
+                try
                 {
-                    retries++;
-                    reterr = null;
+                    if (HttpMethod.Get == method)
+                    {
+                        infoResult = await client.GetAsync(restApi);
+                    }
+                    else if (HttpMethod.Post == method)
+                    {
+                        StringContent postContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+                        infoResult = await client.PostAsync(restApi, postContent);
+                    }
+                    else if(HttpMethod.Put == method)
+                    {
+                        infoResult = await client.PutAsync(restApi, null);
+                    }
+                }
+                catch (TaskCanceledException tcex)
+                {
+                    if (!tcex.CancellationToken.IsCancellationRequested)
+                    {
+                        //HDC time out, wait a bit and try again
+                        Thread.Sleep(2000);
+                    }
+                    else
+                    {
+                        throw tcex;
+                    }
+                }
 
-                    try
-                    {
-                        if (HttpMethod.Get == method)
-                        {
-                            infoResult = await client.GetAsync(restApi);
-                        }
-                        else if (HttpMethod.Post == method)
-                        {
-                            StringContent postContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                            infoResult = await client.PostAsync(restApi, postContent);
-                        }
-                        else if(HttpMethod.Put == method)
-                        {
-                            infoResult = await client.PutAsync(restApi, null);
-                        }
-                    }
-                    catch (TaskCanceledException tcex)
-                    {
-                        if (!tcex.CancellationToken.IsCancellationRequested)
-                        {
-                            //HDC time out, wait a bit and try again
-                            Thread.Sleep(2000);
-                            continue;
-                        }
-                        else
-                        {
-                            throw tcex;
-                        }
-                    }
+                string content = await infoResult.Content.ReadAsStringAsync();
 
-                    string content = await infoResult.Content.ReadAsStringAsync();
+                if (infoResult.IsSuccessStatusCode)
+                {
+                    processContent?.Invoke(content);
+                    return null;
+                }
 
-                    if (infoResult.IsSuccessStatusCode)
+                try
+                {
+                    reterr = JsonConvert.DeserializeObject<DevCenterErrorReturn>(content);
+                }
+                catch (JsonReaderException)
+                {
+                    // Error is in bad format, return raw
+                    reterr = new DevCenterErrorReturn()
                     {
-                        processContent?.Invoke(content);
-                        return null;
-                    }
+                        HttpErrorCode = (int)infoResult.StatusCode,
+                        StatusCode = infoResult.StatusCode.ToString("D") + " " + infoResult.StatusCode.ToString(),
+                        Message = content
+                    };
+                }
 
-                    try
+                // reterr can be null when there is HTTP error
+                if (reterr == null || (reterr.HttpErrorCode.HasValue && reterr.HttpErrorCode.Value == 0))
+                {
+                    reterr = new DevCenterErrorReturn()
                     {
-                        reterr = JsonConvert.DeserializeObject<DevCenterErrorReturn>(content);
-                    }
-                    catch (JsonReaderException)
-                    {
-                        // Error is in bad format, return raw
-                        reterr = new DevCenterErrorReturn()
-                        {
-                            HttpErrorCode = (int)infoResult.StatusCode,
-                            StatusCode = infoResult.StatusCode.ToString("D") + " " + infoResult.StatusCode.ToString(),
-                            Message = content
-                        };
-                    }
-
-                    // reterr can be null when there is HTTP error
-                    if (reterr == null || (reterr.HttpErrorCode.HasValue && reterr.HttpErrorCode.Value == 0))
-                    {
-                        reterr = new DevCenterErrorReturn()
-                        {
-                            HttpErrorCode = (int)infoResult.StatusCode,
-                            StatusCode = infoResult.StatusCode.ToString("D") + " " + infoResult.StatusCode.ToString(),
-                            Message = infoResult.ReasonPhrase
-                        };
-                    }
-
-                    // Retry on the following 'infrastructure' issues
-                    // 502 BadGateway
-                    if (infoResult.StatusCode != System.Net.HttpStatusCode.BadGateway &&
-                        (int)infoResult.StatusCode != 429)
-                    {
-                        break;
-                    }
-                    await Task.Delay(new Random().Next(1000, 10000));
+                        HttpErrorCode = (int)infoResult.StatusCode,
+                        StatusCode = infoResult.StatusCode.ToString("D") + " " + infoResult.StatusCode.ToString(),
+                        Message = infoResult.ReasonPhrase
+                    };
                 }
 
                 if (reterr.Error != null)
@@ -192,6 +168,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
                 return new DevCenterErrorDetails
                 {
+                    Headers = infoResult.Headers,
                     HttpErrorCode = (int)infoResult.StatusCode,
                     Code = reterr.StatusCode,
                     Message = reterr.Message,

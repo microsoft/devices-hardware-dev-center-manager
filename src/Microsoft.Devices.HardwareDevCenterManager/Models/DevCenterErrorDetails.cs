@@ -5,11 +5,16 @@
 --*/
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 {
     public class DevCenterErrorDetails
     {
+        [JsonProperty("headers")]
+        public HttpResponseHeaders Headers { get; set; }
+
         [JsonProperty("code")]
         public string Code { get; set; }
 
