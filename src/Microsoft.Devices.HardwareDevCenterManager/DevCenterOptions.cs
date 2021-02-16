@@ -13,8 +13,5 @@ namespace Microsoft.Devices.HardwareDevCenterManager
         public uint HttpTimeoutSeconds { get; set; }
         public int RequestDelayMs { get; set; }
         public Guid CorrelationId { get; set; }
-        public LastCommandDelegate LastCommand { get; set; }
     }
-
-    public delegate void LastCommandDelegate(DevCenterErrorDetails error);
 }
