@@ -182,7 +182,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         public async Task<DevCenterResponse<Output>> InvokeHdcService<Output>(
             HttpMethod method, string uri, object input, bool isMany) where Output : IArtifact
         {
-            DevCenterResponse<Output> retval = new DevCenterResponse<Output>();
+            DevCenterResponse<Output> retval = new DevCenterResponse<Output>();            
             retval.Error = await InvokeHdcService(method, uri, input, (content) =>
             {
                 if (isMany)
