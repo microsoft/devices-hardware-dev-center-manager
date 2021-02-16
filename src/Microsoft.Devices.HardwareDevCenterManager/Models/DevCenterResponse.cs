@@ -10,6 +10,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
     public class DevCenterResponse<T>
     {
         public DevCenterErrorDetails Error { get; set; }
+        public DevCenterTrace Trace { get; set; }
         public List<T> ReturnValue { get; set; }
     }
 }
