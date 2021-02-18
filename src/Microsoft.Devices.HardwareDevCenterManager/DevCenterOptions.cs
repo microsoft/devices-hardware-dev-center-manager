@@ -3,7 +3,6 @@
 
     Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
 --*/
-using Microsoft.Devices.HardwareDevCenterManager.DevCenterApi;
 using System;
 
 namespace Microsoft.Devices.HardwareDevCenterManager
