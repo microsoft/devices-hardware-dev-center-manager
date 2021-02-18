@@ -19,6 +19,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         private readonly AuthorizationHandlerCredentials AuthCredentials;
         private readonly TimeSpan HttpTimeout;
         private Guid CorrelationId;
+        private readonly LastCommandDelegate LastCommand;
         private DevCenterTrace Trace;
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             AuthHandler = new AuthorizationHandler(AuthCredentials, options.HttpTimeoutSeconds);
             HttpTimeout = TimeSpan.FromSeconds(options.HttpTimeoutSeconds);
             CorrelationId = options.CorrelationId;
+            LastCommand = options.LastCommand;
         }
 
         private string GetDevCenterBaseUrl()
@@ -73,6 +75,11 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     Url = uri,
                     Content = json
                 };
+
+                LastCommand?.Invoke(new DevCenterErrorDetails()
+                {
+                    Trace = Trace
+                });
 
                 client.Timeout = HttpTimeout;
                 Uri restApi = new Uri(uri);

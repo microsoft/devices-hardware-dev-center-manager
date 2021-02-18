@@ -25,6 +25,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
         [JsonProperty("httpErrorCode")]
         public int? HttpErrorCode { get; set; }
+
+        [JsonProperty("trace")]
+        public DevCenterTrace Trace { get; set; }
     }
 
     public class DevCenterErrorValidationErrorEntry
