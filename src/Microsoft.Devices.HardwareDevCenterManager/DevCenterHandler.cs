@@ -20,6 +20,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         private readonly TimeSpan HttpTimeout;
         private Guid CorrelationId;
         private readonly LastCommandDelegate LastCommand;
+        private DevCenterTrace Trace;
 
         /// <summary>
         /// Creates a new DevCenterHandler using the provided credentials
@@ -66,8 +67,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             {
                 client.DefaultRequestHeaders.Add("MS-CorrelationId", CorrelationId.ToString());
                 client.DefaultRequestHeaders.Add("MS-RequestId", RequestId);
-                DevCenterErrorTrace trace = new DevCenterErrorTrace()
+                Trace = new DevCenterTrace()
                 {
+                    CorrelationId = CorrelationId.ToString(),
                     RequestId = RequestId,
                     Method = method.ToString(),
                     Url = uri,
@@ -76,8 +78,9 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 
                 LastCommand?.Invoke(new DevCenterErrorDetails()
                 {
-                    Trace = trace
+                    Trace = Trace
                 });
+
                 client.Timeout = HttpTimeout;
                 Uri restApi = new Uri(uri);
 
@@ -88,7 +91,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                         HttpErrorCode = -1,
                         Code = DefaultErrorcode,
                         Message = "Unsupported HTTP method",
-                        Trace = trace
                     };
                 }
 
@@ -161,7 +163,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 {
                     // include addtional error details if missing from deserialization
                     reterr.Error.HttpErrorCode = (int)infoResult.StatusCode;
-                    reterr.Error.Trace = trace;
 
                     return reterr.Error;
                 }
@@ -173,7 +174,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     Code = reterr.StatusCode,
                     Message = reterr.Message,
                     ValidationErrors = reterr.ValidationErrors,
-                    Trace = trace
                 };
             }
         }
@@ -207,6 +207,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 }
             });
 
+            retval.Trace = Trace;
             return retval;
         }
 
@@ -436,7 +437,6 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             };
             return ret;
         }
-
 
         private const string DevCenterCancelShippingLabelUrl = "/hardware/products/{0}/submissions/{1}/shippingLabels/{2}/cancel";
 
