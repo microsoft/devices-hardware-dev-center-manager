@@ -91,6 +91,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                         HttpErrorCode = -1,
                         Code = DefaultErrorcode,
                         Message = "Unsupported HTTP method",
+                        Trace = Trace
                     };
                 }
 
@@ -174,6 +175,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     Code = reterr.StatusCode,
                     Message = reterr.Message,
                     ValidationErrors = reterr.ValidationErrors,
+                    Trace = Trace
                 };
             }
         }
@@ -336,7 +338,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 ReturnValue = new List<bool>()
                 {
                     error == null
-                }
+                },
+                Trace = Trace
             };
 
             if (error != null)
@@ -433,7 +436,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 ReturnValue = new List<bool>()
                 {
                     error == null
-                }
+                },
+                Trace = Trace
             };
             return ret;
         }
@@ -456,7 +460,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                 ReturnValue = new List<bool>()
                 {
                     error == null
-                }
+                },
+                Trace = Trace
             };
 
             return ret;
