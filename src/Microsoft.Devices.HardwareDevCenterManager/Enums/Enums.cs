@@ -4,9 +4,6 @@
     Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
 --*/
 
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
 namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
 {
     public enum InServicePublishInfoOSEnum
@@ -20,6 +17,8 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
         NineteenH1,
         VB,
         MN,
+        FE,
+        CO,
         Invalid
     }
 }
