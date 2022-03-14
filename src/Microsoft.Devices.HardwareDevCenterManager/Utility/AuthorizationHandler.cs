@@ -73,6 +73,12 @@ namespace Microsoft.Devices.HardwareDevCenterManager.Utility
                 {
                     response = await base.SendAsync(clonedRequest, cancellationToken);
                 }
+                catch (HttpRequestException)
+                {
+                    //HDC request error, wait a bit and try again
+                    Thread.Sleep(2000);
+                    continue;
+                }
                 catch (SocketException)
                 {
                     //HDC timed out, wait a bit and try again
