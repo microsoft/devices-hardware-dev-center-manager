@@ -13,9 +13,14 @@ steps:
     projects: '**/*.csproj'
     arguments: '-c $(BuildConfiguration)'
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.1.x'
+    
 - task: EsrpCodeSigning@1
   inputs:
-    ConnectedServiceName: 'DSX ESRP'
+    ConnectedServiceName: '$(ConnectedServiceName)'
     FolderPath: 'src'
     Pattern: '*.dll'
     signConfigType: 'inlineSignParams'
@@ -52,10 +57,10 @@ steps:
     packagesToPack: '**/*.csproj'
     nobuild: true
     versioningScheme: 'byBuildNumber'
-
+    
 - task: EsrpCodeSigning@1
   inputs:
-    ConnectedServiceName: 'DSX ESRP'
+    ConnectedServiceName: '$(ConnectedServiceName)'
     FolderPath: '$(Build.ArtifactStagingDirectory)'
     Pattern: '*.nupkg'
     signConfigType: 'inlineSignParams'
