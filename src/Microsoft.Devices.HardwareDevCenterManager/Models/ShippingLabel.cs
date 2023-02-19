@@ -72,34 +72,58 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
             Console.WriteLine("         Targeting:");
             if (Targeting != null)
             {
+                // hardware ids
                 Console.WriteLine("           hardwareIds:");
-                foreach (HardwareId hid in Targeting.HardwareIds)
+                if (Targeting.HardwareIds.Count > 0)
                 {
-                    Console.WriteLine("           bundledId: " + hid.BundleId);
-                    Console.WriteLine("           infId:     " + hid.InfId);
-                    Console.WriteLine("           operatingSystemCode: " + hid.OperatingSystemCode);
-                    Console.WriteLine("           pnpString: " + hid.PnpString);
-                    Console.WriteLine("           distributionsState:  " + hid.DistributionState);
+                    foreach (HardwareId hid in Targeting.HardwareIds)
+                    {
+                        Console.WriteLine("           bundledId: " + hid.BundleId);
+                        Console.WriteLine("           infId:     " + hid.InfId);
+                        Console.WriteLine("           operatingSystemCode: " + hid.OperatingSystemCode);
+                        Console.WriteLine("           pnpString: " + hid.PnpString);
+                        Console.WriteLine("           distributionsState:  " + hid.DistributionState);
+                    }
                 }
+
+                // chids
                 Console.WriteLine("           chids:");
-                foreach (CHID chid in Targeting.Chids)
+                if (Targeting.Chids.Count > 0)
                 {
-                    Console.WriteLine("           chid: " + chid.Chid);
-                    Console.WriteLine("           distributionState: " + chid.DistributionState);
+                    foreach (CHID chid in Targeting.Chids)
+                    {
+                        Console.WriteLine("           chid: " + chid.Chid);
+                        Console.WriteLine("           distributionState: " + chid.DistributionState);
+                    }
                 }
+
+                // audiences
                 Console.WriteLine("           restrictedToAudiences:");
-                foreach (string audience in Targeting.RestrictedToAudiences)
+                if (Targeting.RestrictedToAudiences.Count > 0)
                 {
-                    Console.WriteLine("           " + audience);
+                    foreach (string audience in Targeting.RestrictedToAudiences)
+                    {
+                        Console.WriteLine("           " + audience);
+                    }
                 }
+
+                //  in service publish information
                 Console.WriteLine("           inServicePublishInfo:");
-                Console.WriteLine("               flooring: " + Targeting.InServicePublishInfo.Flooring);
-                Console.WriteLine("               ceiling:  " + Targeting.InServicePublishInfo.Ceiling);
+                if (Targeting.InServicePublishInfo != null)
+                {
+                    Console.WriteLine("               flooring: " + Targeting.InServicePublishInfo.Flooring);
+                    Console.WriteLine("               ceiling:  " + Targeting.InServicePublishInfo.Ceiling);
+                }
+
+                //  co-engineering driver publish information
                 Console.WriteLine("           coEngDriverPublishInfo:");
-                Console.WriteLine("               flooringBuildNumber: " + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
-                Console.WriteLine("               ceilingBuildNumber:  " + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
+                if (Targeting.CoEngDriverPublishInfo != null)
+                {
+                    Console.WriteLine("               flooringBuildNumber: " + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
+                    Console.WriteLine("               ceilingBuildNumber:  " + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
+                }
             }
-           
+
             Console.WriteLine("         Links:");
             if (Links != null)
             {
@@ -108,7 +132,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
                     link.Dump();
                 }
             }
-            
+
             Console.WriteLine("         Status:");
             if (WorkflowStatus != null)
             {
