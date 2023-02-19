@@ -1,5 +1,54 @@
+# __Microsoft.Devices.HardwareDevCenterManager__
 
-# Contributing
+![Nuget](https://img.shields.io/nuget/v/Microsoft.Devices.HardwareDevCenterManager)
+![Nuget](https://img.shields.io/nuget/dt/Microsoft.Devices.HardwareDevCenterManager)
+[![Build Validation](https://github.com/microsoft/devices-hardware-dev-center-manager/actions/workflows/dotnet-pr-build-validation.yml/badge.svg)](https://github.com/microsoft/devices-hardware-dev-center-manager/actions/workflows/dotnet-pr-build-validation.yml)
+
+Class library used in invoking HTTP requests to the [Hardware Dev Center dashboard API](https://learn.microsoft.com/en-us/windows-hardware/drivers/dashboard/dashboard-api)
+
+---
+
+## __Features__
+### Manage Products
+```csharp
+DevCenterResponse<Product> response = await api.NewProduct(json);
+DevCenterResponse<Product> response = await api.GetProducts(ProductId);
+```
+---
+
+### Manage Submissions
+```csharp
+DevCenterResponse<Submission> response = await api.NewSubmission(ProductId, json);
+DevCenterResponse<bool> response = await api.CommitSubmission(ProductId, SubmissionId);
+DevCenterResponse<Submission> response = await api.GetSubmission(ProductId, SubmissionId);
+```
+
+---
+
+### Manage Shipping Labels
+```csharp
+DevCenterResponse<ShippingLabel> response = await api.NewShippingLabel(ProductId, SubmissionId, json);
+DevCenterResponse<ShippingLabel> response = await api.GetShippingLabels(ProductId, SubmissionId, ShippingLabelId);
+```
+
+---
+
+### Download Packages
+```csharp
+DevCenterResponse<Submission> response = await api.GetSubmission(ProductId, SubmissionId);
+// use download links from submission resource
+```
+
+---
+
+### Create Metadata
+```csharp
+DevCenterResponse<bool> response = await api.CreateMetaData(ProductId, SubmissionId);
+```
+
+---
+
+## __Contributing__
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
