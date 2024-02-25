@@ -1,30 +1,29 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
-using Newtonsoft.Json;
+
 using System;
+using System.Text.Json.Serialization;
 
-namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
+namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi;
+
+public class Link
 {
-    public class Link
+    [JsonPropertyName("href")]
+    public string Href { get; set; }
+
+    [JsonPropertyName("rel")]
+    public string Rel { get; set; }
+
+    [JsonPropertyName("method")]
+    public string Method { get; set; }
+
+    public void Dump()
     {
-        [JsonProperty("href")]
-        public string Href { get; set; }
-
-        [JsonProperty("rel")]
-        public string Rel { get; set; }
-
-        [JsonProperty("method")]
-        public string Method { get; set; }
-
-        public void Dump()
-        {
-            Console.WriteLine("               - href:   " + Href);
-            Console.WriteLine("               - method: " + Method);
-            Console.WriteLine("               - rel:    " + Rel);
-        }
+        Console.WriteLine("               - href:   " + Href);
+        Console.WriteLine("               - method: " + Method);
+        Console.WriteLine("               - rel:    " + Rel);
     }
-
 }

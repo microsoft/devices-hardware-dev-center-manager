@@ -1,103 +1,103 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
-using Newtonsoft.Json;
+
+using Microsoft.Devices.HardwareDevCenterManager.Utility;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
+namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi;
+
+public class Submission : IArtifact
 {
-    public class Submission : IArtifact
+    [JsonConverter(typeof(LongToStringJsonConverter))]
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
+
+    [JsonConverter(typeof(LongToStringJsonConverter))]
+    [JsonPropertyName("productId")]
+    public string ProductId { get; set; }
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
+    public enum SubmissionType
     {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("productId")]
-        public string ProductId { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-        public enum SubmissionType
-        {
-            [JsonProperty("initial")]
-            Initial,
-            [JsonProperty("derived")]
-            Derived
-        }
-
-        [JsonProperty("commitStatus")]
-        public string CommitStatus { get; set; }
-        
-        [JsonProperty("isExtensionInf")]
-        public bool IsExtensionInf { get; set; }
-
-        [JsonProperty("isUniversal")]
-        public bool IsUniversal { get; set; }
-
-        [JsonProperty("isDeclarativeInf")]
-        public bool IsDeclarativeInf { get; set; }
-
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public string CreatedDateTime { get; set; }
-
-        [JsonProperty("links")]
-        public List<Link> Links { get; set; }
-
-        [JsonProperty("workflowStatus")]
-        public WorkflowStatus WorkflowStatus { get; set; }
-
-        [JsonProperty("downloads")]
-        public Download Downloads { get; set; }
-
-        public async void Dump()
-        {
-            Console.WriteLine("---- Submission: " + Id);
-            Console.WriteLine("         Name:           " + Name);
-            Console.WriteLine("         ProductId:      " + ProductId);
-            Console.WriteLine("         type:           " + Type ?? "");
-            Console.WriteLine("         commitStatus:   " + CommitStatus ?? "");
-            Console.WriteLine("         isExtensionInf: " + IsExtensionInf ?? "");
-            Console.WriteLine("         isUniversal:    " + IsUniversal ?? "");
-            Console.WriteLine("         isDeclarativeInf: " + IsDeclarativeInf ?? "");
-            Console.WriteLine("         CreatedBy:      " + CreatedBy ?? "");
-            Console.WriteLine("         CreateTime:     " + CreatedDateTime ?? "");
-            Console.WriteLine("         Links:");
-            if (Links != null)
-            {
-                foreach (Link link in Links)
-                {
-                    link.Dump();
-                }
-            }
-            Console.WriteLine("         Status:");
-            if (WorkflowStatus != null)
-            {
-                await WorkflowStatus.Dump();
-            }
-            Console.WriteLine("         Downloads:");
-            Console.WriteLine("               - messages:");
-            if (Downloads != null)
-            {
-                Downloads.Dump();
-            }
-            Console.WriteLine();
-        }
+        [JsonPropertyName("initial")]
+        Initial,
+        [JsonPropertyName("derived")]
+        Derived
     }
 
-    public class NewSubmission
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+    [JsonPropertyName("commitStatus")]
+    public string CommitStatus { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; set; }
+    [JsonPropertyName("isExtensionInf")]
+    public bool IsExtensionInf { get; set; }
+
+    [JsonPropertyName("isUniversal")]
+    public bool IsUniversal { get; set; }
+
+    [JsonPropertyName("isDeclarativeInf")]
+    public bool IsDeclarativeInf { get; set; }
+
+    [JsonPropertyName("createdBy")]
+    public string CreatedBy { get; set; }
+
+    [JsonPropertyName("createdDateTime")]
+    public string CreatedDateTime { get; set; }
+
+    [JsonPropertyName("links")]
+    public List<Link> Links { get; set; }
+
+    [JsonPropertyName("workflowStatus")]
+    public WorkflowStatus WorkflowStatus { get; set; }
+
+    [JsonPropertyName("downloads")]
+    public Download Downloads { get; set; }
+
+    public async void Dump()
+    {
+        Console.WriteLine("---- Submission: " + Id);
+        Console.WriteLine("         Name:           " + Name);
+        Console.WriteLine("         ProductId:      " + ProductId);
+        Console.WriteLine("         type:           " + Type ?? "");
+        Console.WriteLine("         commitStatus:   " + CommitStatus ?? "");
+        Console.WriteLine("         isExtensionInf: " + IsExtensionInf ?? "");
+        Console.WriteLine("         isUniversal:    " + IsUniversal ?? "");
+        Console.WriteLine("         isDeclarativeInf: " + IsDeclarativeInf ?? "");
+        Console.WriteLine("         CreatedBy:      " + CreatedBy ?? "");
+        Console.WriteLine("         CreateTime:     " + CreatedDateTime ?? "");
+        Console.WriteLine("         Links:");
+        if (Links != null)
+        {
+            foreach (Link link in Links)
+            {
+                link.Dump();
+            }
+        }
+        Console.WriteLine("         Status:");
+        if (WorkflowStatus != null)
+        {
+            await WorkflowStatus.Dump();
+        }
+        Console.WriteLine("         Downloads:");
+        Console.WriteLine("               - messages:");
+        Downloads?.Dump();
+        Console.WriteLine();
     }
+}
+
+public class NewSubmission
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; }
 }
