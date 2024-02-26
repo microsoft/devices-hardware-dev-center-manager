@@ -1,27 +1,27 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
-using Newtonsoft.Json;
 
-namespace Microsoft.Devices.HardwareDevCenterManager.Utility
+using System.Text.Json.Serialization;
+
+namespace Microsoft.Devices.HardwareDevCenterManager.Utility;
+
+public class AuthorizationHandlerCredentials
 {
-    public class AuthorizationHandlerCredentials
-    {
-        [JsonProperty("key")]
-        public string Key { get; set; }
+    [JsonPropertyName("key")]
+    public string Key { get; set; }
 
-        [JsonProperty("clientId")]
-        public string ClientId { get; set; }
+    [JsonPropertyName("clientId")]
+    public string ClientId { get; set; }
 
-        [JsonProperty("tenantId")]
-        public string TenantId { get; set; }
+    [JsonPropertyName("tenantId")]
+    public string TenantId { get; set; }
 
-        [JsonProperty("url")]
-        public System.Uri Url { get; set; }
+    [JsonPropertyName("url")]
+    public System.Uri Url { get; set; }
 
-        [JsonProperty("urlPrefix")]
-        public System.Uri UrlPrefix { get; set; }
-    }
+    [JsonPropertyName("urlPrefix")]
+    public System.Uri UrlPrefix { get; set; }
 }

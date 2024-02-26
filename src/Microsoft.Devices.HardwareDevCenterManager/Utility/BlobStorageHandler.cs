@@ -1,84 +1,132 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
+
+using Azure;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Microsoft.Devices.HardwareDevCenterManager.Utility
+namespace Microsoft.Devices.HardwareDevCenterManager.Utility;
+
+public class BlobStorageHandler
 {
-    public class BlobStorageHandler
+    private readonly BlockBlobClient _blockBlobClient;
+
+    /// <summary>
+    /// Handles upload and download of files for HDC Azure Blob Storage URLs
+    /// </summary>
+    /// <param name="SASUrl">URL String to the blob</param>
+    public BlobStorageHandler(string SASUrl)
     {
-        private readonly CloudBlockBlob blob;
-        private const int BlockSize = 256 * 1024;
+        _blockBlobClient = new BlockBlobClient(new Uri(SASUrl));
+    }
 
-        /// <summary>
-        /// Handles upload and download of files for HWDC Azure Blob Storage URLs
-        /// </summary>
-        /// <param name="SASUrl">URL String to the blob</param>
-        public BlobStorageHandler(string SASUrl)
+    /// <summary>
+    /// Uploads specified file to HDC Azure Storage
+    /// </summary>
+    /// <param name="filePath">Path to the file to upload to the Azure Blob URL</param>
+    /// <returns>True if the upload succeeded</returns>
+    public async Task Upload(string filePath)
+    {
+        try
         {
-            blob = new CloudBlockBlob(new Uri(SASUrl));
+            using System.IO.FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            await _blockBlobClient.UploadAsync(fileStream, null, default);
+        }
+        catch (RequestFailedException rfe)
+        {
+            Console.WriteLine("{process} {method} - RequestFailedException error uploading blob. Error - {errorMessage}",
+                nameof(BlobStorageHandler),
+                nameof(Download),
+                rfe.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("{process} {method} - Exception uploading blob. Error - {errorMessage}",
+                nameof(BlobStorageHandler),
+                nameof(DownloadToString),
+                ex.Message);
         }
 
-        /// <summary>
-        /// Uploads specified file to HWDC Azure Storage
-        /// </summary>
-        /// <param name="filepath">Path to the file to upload to the Azure Blob URL</param>
-        /// <returns>True if the upload succeeded</returns>
-        public async Task<bool> Upload(string filepath)
+        return;
+    }
+
+    private void ReportProgress()
+    {
+        // todo: see if we can find a way to write progress using the Azure.Storage namespace
+    }
+
+    private long _fileSize;
+
+    /// <summary>
+    /// Downloads to specified file from HDC Azure Storage
+    /// </summary>
+    /// <param name="filepath">Path to the file to download to, from the Azure Blob URL</param>
+    /// <returns>True if the download succeeded</returns>
+    public async Task Download(string filePath)
+    {
+        try
         {
-            fileSize = new System.IO.FileInfo(filepath).Length;
-            Console.Write("  0%");
-            await blob.UploadFromFileAsync(filepath,
-                AccessCondition.GenerateEmptyCondition(),
-                new BlobRequestOptions(),
-                new OperationContext(),
-                new Progress<Microsoft.Azure.Storage.Core.Util.StorageProgress>(ReportProgress),
-                new System.Threading.CancellationToken());
-            Console.WriteLine();
-            return true;
+            await _blockBlobClient.DownloadToAsync(filePath);
+        }
+        catch (RequestFailedException rfe)
+        {
+            Console.WriteLine("{process} {method} - RequestFailedException error downloading blob to file. Error - {errorMessage}",
+                nameof(BlobStorageHandler),
+                nameof(Download),
+                rfe.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("{process} {method} - Exception downloading blob to file. Error - {errorMessage}",
+                nameof(BlobStorageHandler),
+                nameof(DownloadToString),
+                ex.Message);
         }
 
-        private void ReportProgress(Microsoft.Azure.Storage.Core.Util.StorageProgress value)
+        return;
+    }
+
+    /// <summary>
+    /// Downloads a specified file from HDC Azure Storage as a string
+    /// </summary>
+    /// <returns>String representing the content from Azure Storage</returns>
+    public async Task<string> DownloadToString()
+    {
+        try
         {
-            long percent = (int)(value.BytesTransferred * 100) / fileSize;
-            Console.Write("\b\b\b\b{0,3:##0}%", percent);
+            Response<BlobDownloadResult> response = await _blockBlobClient.DownloadContentAsync();
+            if (response != null)
+            {
+                if (response.Value != null)
+                {
+                    if (response.Value.Content != null)
+                    {
+                        return response.Value.Content.ToString();
+                    }
+                }
+            }
+        }
+        catch (RequestFailedException rfe)
+        {
+            Console.WriteLine("{process} {method} - RequestFailedException error downloading blob to string. Error - {errorMessage}",
+                nameof(BlobStorageHandler),
+                nameof(DownloadToString),
+                rfe.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("{process} {method} - Exception downloading blob to string. Error - {errorMessage}",
+                nameof(BlobStorageHandler),
+                nameof(DownloadToString),
+                ex.Message);
         }
 
-        private long fileSize;
-
-        /// <summary>
-        /// Downloads to specified file from HWDC Azure Storage
-        /// </summary>
-        /// <param name="filepath">Path to the file to download to from the Azure Blob URL</param>
-        /// <returns>True if the download succeeded</returns>
-        public async Task<bool> Download(string filepath)
-        {
-            blob.FetchAttributes();
-            fileSize = blob.Properties.Length;
-            Console.Write("  0%");
-            await blob.DownloadToFileAsync(filepath, FileMode.OpenOrCreate,
-                AccessCondition.GenerateEmptyCondition(),
-                new BlobRequestOptions(),
-                new OperationContext(),
-                new Progress<Microsoft.Azure.Storage.Core.Util.StorageProgress>(ReportProgress),
-                new System.Threading.CancellationToken());
-            Console.WriteLine();
-            return true;
-        }
-
-        /// <summary>
-        /// Downloads to specified file from HWDC Azure Storage as a string
-        /// </summary>
-        /// <returns>String representing the content from Azure Storage</returns>
-        public async Task<string> DownloadToString()
-        {
-            return await blob.DownloadTextAsync();
-        }
+        return string.Empty;
     }
 }
