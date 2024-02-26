@@ -36,6 +36,7 @@ internal class AuthorizationHandler : DelegatingHandler
     /// <param name="credentials">The set of credentials to use for the token acquisition</param>
     /// <param name="httpTimeoutSeconds">Integer value specifying HTTP timeout when making requests to HDC</param>
     public AuthorizationHandler(AuthorizationHandlerCredentials credentials, uint httpTimeoutSeconds)
+        : base(new HttpClientHandler())
     {
         _accessToken = null;
         _authCredentials = credentials;
