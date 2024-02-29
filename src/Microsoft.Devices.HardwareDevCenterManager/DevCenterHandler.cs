@@ -61,17 +61,17 @@ public class DevCenterHandler : IDisposable, IDevCenterHandler
         HttpMethod method, string uri, object input, Action<string> processContent)
     {
         DevCenterErrorReturn returnError = null;
-        string RequestId = Guid.NewGuid().ToString();
+        string requestId = Guid.NewGuid().ToString();
         string json = JsonSerializer.Serialize(input ?? new object());
 
         using HttpClient client = new(_authHandler, false);
         client.DefaultRequestHeaders.Add("MS-CorrelationId", _correlationId.ToString());
-        client.DefaultRequestHeaders.Add("MS-RequestId", RequestId);
+        client.DefaultRequestHeaders.Add("MS-RequestId", requestId);
 
         _trace = new DevCenterTrace()
         {
             CorrelationId = _correlationId.ToString(),
-            RequestId = RequestId,
+            RequestId = requestId,
             Method = method.ToString(),
             Url = uri,
             Content = json
@@ -301,8 +301,7 @@ public class DevCenterHandler : IDisposable, IDevCenterHandler
         return await HdcGet<Submission>(getProductSubmissionUrl, isMany);
     }
 
-    private const string _devCenterPartnerSubmissionUrl =
-        "/hardware/products/relationships/sourcepubliherid/{0}/sourceproductid/{1}/sourcesubmissionid/{2}";
+    private const string _devCenterPartnerSubmissionUrl = "/hardware/products/relationships/sourcepubliherid/{0}/sourceproductid/{1}/sourcesubmissionid/{2}";
 
     /// <summary>
     /// Gets shared submission info from a partner-shared Submission with partner ids

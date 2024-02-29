@@ -39,7 +39,7 @@ public class WorkflowStatus
         if (ErrorReport != null)
         {
             Console.WriteLine("> Error Report:");
-            Utility.BlobStorageHandler bsh = new Utility.BlobStorageHandler(ErrorReport);
+            Utility.BlobStorageHandler bsh = new(ErrorReport);
             string errorContent = await bsh.DownloadToString();
             Console.WriteLine(errorContent);
             Console.WriteLine();

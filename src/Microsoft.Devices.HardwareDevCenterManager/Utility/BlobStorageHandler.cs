@@ -35,7 +35,7 @@ public class BlobStorageHandler
     {
         try
         {
-            using System.IO.FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using System.IO.FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
             await _blockBlobClient.UploadAsync(fileStream, null, default);
         }
         catch (RequestFailedException rfe)
@@ -60,8 +60,6 @@ public class BlobStorageHandler
     {
         // todo: see if we can find a way to write progress using the Azure.Storage namespace
     }
-
-    private long _fileSize;
 
     /// <summary>
     /// Downloads to specified file from HDC Azure Storage

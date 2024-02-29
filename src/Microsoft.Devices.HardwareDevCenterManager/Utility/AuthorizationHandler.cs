@@ -135,7 +135,7 @@ internal class AuthorizationHandler : DelegatingHandler
             client.Timeout = _httpTimeout;
             Uri restApi = new(DevCenterTokenUrl);
 
-            ClientSecretCredential credential = new ClientSecretCredential(_authCredentials.TenantId, _authCredentials.ClientId, _authCredentials.Key);
+            ClientSecretCredential credential = new(_authCredentials.TenantId, _authCredentials.ClientId, _authCredentials.Key);
             AccessToken token = await credential.GetTokenAsync(new TokenRequestContext(scopes: new string[] { "https://manage.devcenter.microsoft.com/.default" }));
 
             if (string.IsNullOrEmpty(token.Token) == false)
