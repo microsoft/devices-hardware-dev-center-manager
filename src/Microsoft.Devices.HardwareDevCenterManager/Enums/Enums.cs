@@ -1,24 +1,24 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
 
-namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
+namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi;
+
+public enum InServicePublishInfoOSEnum
 {
-    public enum InServicePublishInfoOSEnum
-    {
-        TH,
-        RS1,
-        RS2,
-        RS3,
-        RS4,
-        RS5,
-        NineteenH1,
-        VB,
-        MN,
-        FE,
-        CO,
-        Invalid
-    }
+    TH,
+    RS1,
+    RS2,
+    RS3,
+    RS4,
+    RS5,
+    NineteenH1,
+    VB,
+    MN,
+    FE,
+    CO,
+    NI,
+    Invalid
 }

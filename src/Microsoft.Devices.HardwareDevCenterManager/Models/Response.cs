@@ -1,19 +1,19 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
-using Newtonsoft.Json;
+
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi
+namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi;
+
+public class Response<T>
 {
-    public class Response<T>
-    {
-        [JsonProperty("value")]
-        public List<T> Value { get; set; }
+    [JsonPropertyName("value")]
+    public List<T> Value { get; set; }
 
-        [JsonProperty("links")]
-        public List<Link> Links { get; set; }
-    }
+    [JsonPropertyName("links")]
+    public List<Link> Links { get; set; }
 }

@@ -1,9 +1,11 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license.  See LICENSE file in the project root for full license information.
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
-using Newtonsoft.Json;
+
+using Azure.Core;
+using Azure.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,189 +15,175 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.Devices.HardwareDevCenterManager.Utility
+namespace Microsoft.Devices.HardwareDevCenterManager.Utility;
+
+internal class HttpRetriesExhaustedException : Exception
 {
-    internal class HttpRetriesExhaustedException : Exception
+    public HttpRetriesExhaustedException(string msg) : base(msg) { }
+}
+
+internal class AuthorizationHandler : DelegatingHandler
+{
+    private string _accessToken;
+    private readonly AuthorizationHandlerCredentials _authCredentials;
+    private readonly TimeSpan _httpTimeout;
+
+    private const int _maxRetries = 10;
+
+    /// <summary>
+    /// Handles OAuth Tokens for HTTP request to Microsoft Hardware Dev Center
+    /// </summary>
+    /// <param name="credentials">The set of credentials to use for the token acquisition</param>
+    /// <param name="httpTimeoutSeconds">Integer value specifying HTTP timeout when making requests to HDC</param>
+    public AuthorizationHandler(AuthorizationHandlerCredentials credentials, uint httpTimeoutSeconds)
+        : base(new HttpClientHandler())
     {
-        public HttpRetriesExhaustedException(string msg) : base(msg) { }
+        _accessToken = null;
+        _authCredentials = credentials;
+        _httpTimeout = TimeSpan.FromSeconds(httpTimeoutSeconds);
     }
 
-    internal class AuthorizationHandler : DelegatingHandler
+    /// <summary>
+    /// Inserts Bearer token into HTTP requests and also does a retry on failed requests since
+    /// HDC sometimes fails
+    /// </summary>
+    /// <param name="request">HTTP Request to send</param>
+    /// <param name="cancellationToken">CancellationToken in case the request is cancelled</param>
+    /// <returns>Returns the HttpResponseMessage from the request</returns>
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        private string _AccessToken;
-        private readonly AuthorizationHandlerCredentials AuthCredentials;
-        private readonly TimeSpan HttpTimeout;
+        int tries = 0;
+        HttpResponseMessage response = null;
 
-        private const int MAX_RETRIES = 10;
-
-        /// <summary>
-        /// Handles OAuth Tokens for HTTP request to Microsoft Hardware Dev Center
-        /// </summary>
-        /// <param name="credentials">The set of credentials to use for the token acquitisiton</param>
-        /// <param name="httpTimeoutSeconds">Integer value specifying HTTP timeout when making requests to HDC</param>
-        public AuthorizationHandler(AuthorizationHandlerCredentials credentials, uint httpTimeoutSeconds)
+        // If there is no valid access token for HDC, get one and then add it to the request
+        if (_accessToken == null)
         {
-            _AccessToken = null;
-            AuthCredentials = credentials;
-            InnerHandler = new HttpClientHandler();
-            HttpTimeout = TimeSpan.FromSeconds(httpTimeoutSeconds);
+            await ObtainAccessToken();
         }
 
-        /// <summary>
-        /// Inserts Bearer token into HTTP requests and also does a retry on failed requests since
-        /// HDC sometimes fails
-        /// </summary>
-        /// <param name="request">HTTP Request to send</param>
-        /// <param name="cancellationToken">CancellationToken in case the request is cancelled</param>
-        /// <returns>Returns the HttpResonseMessage from the request</returns>
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        while (tries < _maxRetries)
         {
-            int tries = 0;
-            HttpResponseMessage response = null;
+            tries++;
 
-            //If there is no valid access token for HDC, get one and then add it to the request
-            if (_AccessToken == null)
+            // Clone the original request so we have a copy in case of a failure
+            HttpRequestMessage clonedRequest = await CloneHttpRequestMessageAsync(request);
+
+            clonedRequest.Headers.Add("Authorization", "Bearer " + _accessToken);
+
+            // Send request
+            try
+            {
+                response = await base.SendAsync(clonedRequest, cancellationToken);
+            }
+            catch (HttpRequestException)
+            {
+                // HDC request error, wait a bit and try again
+                Thread.Sleep(2000);
+                continue;
+            }
+            catch (SocketException)
+            {
+                // HDC timed out, wait a bit and try again
+                Thread.Sleep(2000);
+                continue;
+            }
+            catch (TaskCanceledException tcex)
+            {
+                if (!tcex.CancellationToken.IsCancellationRequested)
+                {
+                    // HDC time out, wait a bit and try again
+                    Thread.Sleep(2000);
+                    continue;
+                }
+                else
+                {
+                    throw tcex;
+                }
+            }
+
+            // If unauthorized, the token likely expired so get a new one and retry
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 await ObtainAccessToken();
+                continue;
             }
-
-            while (tries < MAX_RETRIES)
+            else if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                tries++;
-
-                //Clone the original request so we have a copy in case of a failure
-                HttpRequestMessage clonedRequest = await CloneHttpRequestMessageAsync(request);
-
-                clonedRequest.Headers.Add("Authorization", "Bearer " + _AccessToken);
-
-                //Send request
-                try
-                {
-                    response = await base.SendAsync(clonedRequest, cancellationToken);
-                }
-                catch (HttpRequestException)
-                {
-                    //HDC request error, wait a bit and try again
-                    Thread.Sleep(2000);
-                    continue;
-                }
-                catch (SocketException)
-                {
-                    //HDC timed out, wait a bit and try again
-                    Thread.Sleep(2000);
-                    continue;
-                }
-                catch (TaskCanceledException tcex)
-                {
-                    if (!tcex.CancellationToken.IsCancellationRequested)
-                    {
-                        //HDC time out, wait a bit and try again
-                        Thread.Sleep(2000);
-                        continue;
-                    }
-                    else
-                    {
-                        throw tcex;
-                    }
-                }
-
-                //If unauthorized, the token likely expired so get a new one and retry
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await ObtainAccessToken();
-                    continue;
-                }
-                else if (response.StatusCode == HttpStatusCode.InternalServerError)
-                {
-                    //Somtimes HDC returns 500 errors so wait a bit then retry once instead of failing the whole flow
-                    Thread.Sleep(2000);
-                    continue;
-                }
-
-                break;
+                // Sometimes HDC returns 500 errors so wait a bit then retry once instead of failing the call.
+                Thread.Sleep(2000);
+                continue;
             }
 
-            if (response == null)
-            {
-                throw new HttpRetriesExhaustedException("AuthorizationHandler: NULL response, unable to talk to HDC");
-            }
-
-            return response;
+            break;
         }
 
-        private async Task<bool> ObtainAccessToken()
+        if (response == null)
         {
-            bool IsSuccess = false;
-            string DevCenterTokenUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/token", AuthCredentials.TenantId);
-
-            using (HttpClient client = new HttpClient())
-            {
-                client.Timeout = HttpTimeout;
-                Uri restApi = new Uri(DevCenterTokenUrl);
-
-                StringContent postcontent = new StringContent("grant_type=client_credentials" +
-                                                              "&client_id=" + Uri.EscapeDataString(AuthCredentials.ClientId) +
-                                                              "&client_secret=" + Uri.EscapeDataString(AuthCredentials.Key) +
-                                                              "&resource=" + Uri.EscapeDataString("https://manage.devcenter.microsoft.com"),
-                                                              System.Text.Encoding.UTF8,
-                                                              "application/x-www-form-urlencoded");
-
-                HttpResponseMessage infoResult = await client.PostAsync(restApi, postcontent);
-
-                string content = await infoResult.Content.ReadAsStringAsync();
-
-                if (infoResult.IsSuccessStatusCode)
-                {
-                    dynamic jObj = JsonConvert.DeserializeObject(content);
-
-                    if (jObj != null)
-                    {
-                        _AccessToken = jObj.access_token;
-                        IsSuccess = true;
-                    }
-                }
-            }
-
-            return IsSuccess;
+            throw new HttpRetriesExhaustedException("AuthorizationHandler: NULL response, unable to communicate with Hardware Dev Center");
         }
 
-        //
-        // https://stackoverflow.com/questions/21467018/how-to-forward-an-httprequestmessage-to-another-server
-        //
-        public static async Task<HttpRequestMessage> CloneHttpRequestMessageAsync(HttpRequestMessage request)
+        return response;
+    }
+
+    private async Task<bool> ObtainAccessToken()
+    {
+        bool IsSuccess = false;
+        string DevCenterTokenUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/token", _authCredentials.TenantId);
+
+        using (HttpClient client = new())
         {
-            HttpRequestMessage clone = new HttpRequestMessage(request.Method, request.RequestUri);
+            client.Timeout = _httpTimeout;
+            Uri restApi = new(DevCenterTokenUrl);
 
-            // Copy the request's content (via a MemoryStream) into the cloned object
-            MemoryStream ms = new MemoryStream();
-            if (request.Content != null)
+            ClientSecretCredential credential = new(_authCredentials.TenantId, _authCredentials.ClientId, _authCredentials.Key);
+            AccessToken token = await credential.GetTokenAsync(new TokenRequestContext(scopes: new string[] { "https://manage.devcenter.microsoft.com/.default" }));
+
+            if (string.IsNullOrEmpty(token.Token) == false)
             {
-                await request.Content.CopyToAsync(ms).ConfigureAwait(false);
-                ms.Position = 0;
-                clone.Content = new StreamContent(ms);
+                _accessToken = token.Token;
+                IsSuccess = true;
+            }
+        }
 
-                // Copy the content headers
-                if (request.Content.Headers != null)
+        return IsSuccess;
+    }
+
+    //
+    // https://stackoverflow.com/questions/21467018/how-to-forward-an-httprequestmessage-to-another-server
+    //
+    public static async Task<HttpRequestMessage> CloneHttpRequestMessageAsync(HttpRequestMessage request)
+    {
+        HttpRequestMessage clone = new(request.Method, request.RequestUri);
+
+        // Copy the request's content (via a MemoryStream) into the cloned object
+        MemoryStream ms = new();
+        if (request.Content != null)
+        {
+            await request.Content.CopyToAsync(ms).ConfigureAwait(false);
+            ms.Position = 0;
+            clone.Content = new StreamContent(ms);
+
+            // Copy the content headers
+            if (request.Content.Headers != null)
+            {
+                foreach (KeyValuePair<string, IEnumerable<string>> h in request.Content.Headers)
                 {
-                    foreach (KeyValuePair<string, IEnumerable<string>> h in request.Content.Headers)
-                    {
-                        clone.Content.Headers.Add(h.Key, h.Value);
-                    }
+                    clone.Content.Headers.Add(h.Key, h.Value);
                 }
             }
-            clone.Version = request.Version;
-
-            foreach (KeyValuePair<string, object> prop in request.Properties)
-            {
-                clone.Properties.Add(prop);
-            }
-
-            foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
-            {
-                clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
-            }
-
-            return clone;
         }
+        clone.Version = request.Version;
+
+        foreach (KeyValuePair<string, object> prop in request.Properties)
+        {
+            clone.Properties.Add(prop);
+        }
+
+        foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
+        {
+            clone.Headers.TryAddWithoutValidation(header.Key, header.Value);
+        }
+
+        return clone;
     }
 }
