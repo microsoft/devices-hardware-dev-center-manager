@@ -16,40 +16,54 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '2.1.x'
-    
-- task: EsrpCodeSigning@1
+    version: '6.x'
+
+- task: EsrpCodeSigning@5
   inputs:
     ConnectedServiceName: '$(ConnectedServiceName)'
+    AppRegistrationClientId: '$(EsrpAppRegistrationClientId)'
+    AppRegistrationTenantId: '$(EsrpAppRegistrationTenantId)'
+    AuthAKVName: '$(EsrpKeyVault)'
+    AuthCertName: '$(EsrpCertName)'
+    AuthSignCertName: '$(EsrpSignCertName)'
     FolderPath: 'src'
     Pattern: '*.dll'
     signConfigType: 'inlineSignParams'
     inlineOperation: |
       [
         {
-            "KeyCode" : "CP-230856",
-            "OperationCode" : "SigntoolSign",
-            "Parameters" : {
-                "OpusName" : "Microsoft",
-                "OpusInfo" : "http://www.microsoft.com",
-                "FileDigest" : "/fd \"SHA256\"",
-                "PageHash" : "/NPH",
-                "TimeStamp" : "/tr \"http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer\" /td sha256"
+          "keyCode": "CP-230856",
+          "operationSetCode": "SigntoolSign",
+          "parameters": [
+            {
+              "parameterName": "OpusName",
+              "parameterValue": "Microsoft"
             },
-            "ToolName" : "sign",
-            "ToolVersion" : "1.0"
-        },
-        {
-            "KeyCode" : "CP-230856",
-            "OperationCode" : "SigntoolVerify",
-            "Parameters" : {},
-            "ToolName" : "sign",
-            "ToolVersion" : "1.0"
+            {
+              "parameterName": "OpusInfo",
+              "parameterValue": "http://www.microsoft.com"
+            },
+            {
+              "parameterName": "PageHash",
+              "parameterValue": "/NPH"
+            },
+            {
+              "parameterName": "FileDigest",
+              "parameterValue": "/fd sha256"
+            },
+            {
+              "parameterName": "TimeStamp",
+              "parameterValue": "/tr \"http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer\" /td sha256"
+            }
+          ],
+          "toolName": "signtool.exe",
+          "toolVersion": "6.2.9304.0"
         }
       ]
     SessionTimeout: '60'
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
+    PendingAnalysisWaitTimeoutMinutes: '5'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -57,10 +71,15 @@ steps:
     packagesToPack: '**/*.csproj'
     nobuild: true
     versioningScheme: 'byBuildNumber'
-    
-- task: EsrpCodeSigning@1
+
+- task: EsrpCodeSigning@5
   inputs:
     ConnectedServiceName: '$(ConnectedServiceName)'
+    AppRegistrationClientId: '$(EsrpAppRegistrationClientId)'
+    AppRegistrationTenantId: '$(EsrpAppRegistrationTenantId)'
+    AuthAKVName: '$(EsrpKeyVault)'
+    AuthCertName: '$(EsrpCertName)'
+    AuthSignCertName: '$(EsrpSignCertName)'
     FolderPath: '$(Build.ArtifactStagingDirectory)'
     Pattern: '*.nupkg'
     signConfigType: 'inlineSignParams'
@@ -84,6 +103,7 @@ steps:
     SessionTimeout: '60'
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
+    PendingAnalysisWaitTimeoutMinutes: '5'
 
 - task: CopyFiles@2
   inputs:
