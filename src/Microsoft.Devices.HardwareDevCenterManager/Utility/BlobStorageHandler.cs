@@ -1,7 +1,7 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
 
 using Azure;
@@ -40,17 +40,11 @@ public class BlobStorageHandler
         }
         catch (RequestFailedException rfe)
         {
-            Console.WriteLine("{process} {method} - RequestFailedException error uploading blob. Error - {errorMessage}",
-                nameof(BlobStorageHandler),
-                nameof(Download),
-                rfe.Message);
+            Console.WriteLine($"{nameof(BlobStorageHandler)} {nameof(Download)} - RequestFailedException error uploading blob. Error - {rfe.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("{process} {method} - Exception uploading blob. Error - {errorMessage}",
-                nameof(BlobStorageHandler),
-                nameof(DownloadToString),
-                ex.Message);
+            Console.WriteLine($"{nameof(BlobStorageHandler)} {nameof(DownloadToString)} - Exception uploading blob. Error - {ex.Message}");
         }
 
         return;
@@ -74,17 +68,11 @@ public class BlobStorageHandler
         }
         catch (RequestFailedException rfe)
         {
-            Console.WriteLine("{process} {method} - RequestFailedException error downloading blob to file. Error - {errorMessage}",
-                nameof(BlobStorageHandler),
-                nameof(Download),
-                rfe.Message);
+            Console.WriteLine($"{nameof(BlobStorageHandler)} {nameof(Download)} - RequestFailedException error downloading blob to file. Error - {rfe.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("{process} {method} - Exception downloading blob to file. Error - {errorMessage}",
-                nameof(BlobStorageHandler),
-                nameof(DownloadToString),
-                ex.Message);
+            Console.WriteLine($"{nameof(BlobStorageHandler)} {nameof(DownloadToString)} - Exception downloading blob to file. Error - {ex.Message}");
         }
 
         return;
@@ -112,17 +100,11 @@ public class BlobStorageHandler
         }
         catch (RequestFailedException rfe)
         {
-            Console.WriteLine("{process} {method} - RequestFailedException error downloading blob to string. Error - {errorMessage}",
-                nameof(BlobStorageHandler),
-                nameof(DownloadToString),
-                rfe.Message);
+            Console.WriteLine($"{nameof(BlobStorageHandler)} {nameof(DownloadToString)} - RequestFailedException error downloading blob to string. Error - {rfe.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("{process} {method} - Exception downloading blob to string. Error - {errorMessage}",
-                nameof(BlobStorageHandler),
-                nameof(DownloadToString),
-                ex.Message);
+            Console.WriteLine($"{nameof(BlobStorageHandler)} {nameof(DownloadToString)} - Exception downloading blob to string. Error - {ex.Message}");
         }
 
         return string.Empty;
