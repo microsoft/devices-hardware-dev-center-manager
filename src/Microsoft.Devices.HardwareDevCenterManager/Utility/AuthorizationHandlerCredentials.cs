@@ -1,7 +1,7 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
 
 using System.Text.Json.Serialization;
@@ -24,4 +24,10 @@ public class AuthorizationHandlerCredentials
 
     [JsonPropertyName("urlPrefix")]
     public System.Uri UrlPrefix { get; set; }
+
+    [JsonPropertyName("managedIdentityClientId")]
+    public string ManagedIdentityClientId { get; set; }
+
+    [JsonPropertyName("scope")]
+    public string Scope { get; set; }
 }

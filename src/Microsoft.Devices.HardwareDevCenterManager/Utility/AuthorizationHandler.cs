@@ -125,27 +125,78 @@ internal class AuthorizationHandler : DelegatingHandler
         return response;
     }
 
-    private async Task<bool> ObtainAccessToken()
+    private async Task<AccessToken> ObtainAccessToken(CancellationToken cancellationToken = default)
     {
-        bool IsSuccess = false;
-        string DevCenterTokenUrl = string.Format("https://login.microsoftonline.com/{0}/oauth2/token", _authCredentials.TenantId);
-
-        using (HttpClient client = new())
+        if (!string.IsNullOrEmpty(_authCredentials.ManagedIdentityClientId))
         {
-            client.Timeout = _httpTimeout;
-            Uri restApi = new(DevCenterTokenUrl);
+            return await GetClientAssertionTokenAsync(cancellationToken);
+        }
+        else
+        {
+            return await GetTokenUsingClientSecretAsync(cancellationToken);
+        }
+    }
 
-            ClientSecretCredential credential = new(_authCredentials.TenantId, _authCredentials.ClientId, _authCredentials.Key);
-            AccessToken token = await credential.GetTokenAsync(new TokenRequestContext(scopes: new string[] { "https://manage.devcenter.microsoft.com/.default" }));
+    private async Task<AccessToken> GetClientAssertionTokenAsync(CancellationToken cancellationToken)
+    {
+        AccessToken token = default;
 
-            if (string.IsNullOrEmpty(token.Token) == false)
-            {
-                _accessToken = token.Token;
-                IsSuccess = true;
-            }
+        var clientAssertionCredential = new ClientAssertionCredential(
+            _authCredentials.TenantId,
+            _authCredentials.ClientId,
+            async (token) => await GetTokenUsingManagedIdentityAsync(cancellationToken)
+        );
+
+        token = await clientAssertionCredential.GetTokenAsync(
+            new TokenRequestContext(new[] { "https://manage.devcenter.microsoft.com/.default" }),
+            cancellationToken
+        );
+
+        if (!string.IsNullOrEmpty(token.Token))
+        {
+            _accessToken = token.Token;
         }
 
-        return IsSuccess;
+        return token;
+    }
+
+    /// <summary>
+    /// Callback function for <see cref="GetClientAssertionTokenAsync"/>
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    private async Task<string> GetTokenUsingManagedIdentityAsync(CancellationToken cancellationToken)
+    {
+        var credential = new ManagedIdentityCredential(_authCredentials.ManagedIdentityClientId);
+
+        var token = await credential.GetTokenAsync(
+            new TokenRequestContext(new[] { _authCredentials.Scope }),
+            cancellationToken
+        );
+
+        return token.Token;
+    }
+
+    private async Task<AccessToken> GetTokenUsingClientSecretAsync(CancellationToken cancellationToken)
+    {
+
+        var credential = new ClientSecretCredential(
+            _authCredentials.TenantId,
+            _authCredentials.ClientId,
+            _authCredentials.Key
+        );
+
+        var token = await credential.GetTokenAsync(
+            new TokenRequestContext(new[] { "https://manage.devcenter.microsoft.com/.default" }),
+            cancellationToken
+        );
+
+        if (!string.IsNullOrEmpty(token.Token))
+        {
+            _accessToken = token.Token;
+        }
+
+        return token;
     }
 
     //
