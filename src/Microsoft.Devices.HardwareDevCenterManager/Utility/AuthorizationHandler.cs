@@ -6,12 +6,14 @@
 
 using Azure.Core;
 using Azure.Identity;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,6 +61,12 @@ internal class AuthorizationHandler : DelegatingHandler
         if (_accessToken == null)
         {
             await ObtainAccessToken();
+        }
+
+        // don't attempt to make the call without a token
+        if (string.IsNullOrWhiteSpace(_accessToken) == true)
+        {
+            throw new CredentialUnavailableException("An access token wasn't available. Please check auth settings to ensure one can be created.");
         }
 
         while (tries < _maxRetries)
@@ -127,14 +135,22 @@ internal class AuthorizationHandler : DelegatingHandler
 
     private async Task<AccessToken> ObtainAccessToken(CancellationToken cancellationToken = default)
     {
-        if (!string.IsNullOrEmpty(_authCredentials.ManagedIdentityClientId))
+        if (_authCredentials.X509Certificate2 != null)
+        {
+            return await GetTokenUsingX509Certificate2Async(_authCredentials.X509Certificate2, cancellationToken);
+        }
+
+        if (string.IsNullOrEmpty(_authCredentials.ManagedIdentityClientId) == false)
         {
             return await GetClientAssertionTokenAsync(cancellationToken);
         }
-        else
+
+        if (string.IsNullOrEmpty(_authCredentials.Key) == false)
         {
             return await GetTokenUsingClientSecretAsync(cancellationToken);
         }
+
+        return default;
     }
 
     private async Task<AccessToken> GetClientAssertionTokenAsync(CancellationToken cancellationToken)
@@ -152,12 +168,12 @@ internal class AuthorizationHandler : DelegatingHandler
             cancellationToken
         );
 
-        if (!string.IsNullOrEmpty(token.Token))
+        if (string.IsNullOrEmpty(token.Token) == false)
         {
             _accessToken = token.Token;
         }
 
-        return token;
+        return default;
     }
 
     /// <summary>
@@ -177,9 +193,27 @@ internal class AuthorizationHandler : DelegatingHandler
         return token.Token;
     }
 
+    private async Task<AccessToken> GetTokenUsingX509Certificate2Async(X509Certificate2 x509Certificate2, CancellationToken cancellationToken)
+    {
+        var app = ConfidentialClientApplicationBuilder.Create(_authCredentials.ClientId)
+            .WithCertificate(_authCredentials.X509Certificate2, sendX5C: true)
+            .WithAuthority(_authCredentials.Authority)
+            .Build();
+
+        var authResult = await app.AcquireTokenForClient(new[] { "https://manage.devcenter.microsoft.com/.default" })
+            .ExecuteAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        if (string.IsNullOrEmpty(authResult.AccessToken) == false)
+        {
+            _accessToken = authResult.AccessToken;
+        }
+
+        return default;
+    }
+
     private async Task<AccessToken> GetTokenUsingClientSecretAsync(CancellationToken cancellationToken)
     {
-
         var credential = new ClientSecretCredential(
             _authCredentials.TenantId,
             _authCredentials.ClientId,
@@ -191,12 +225,12 @@ internal class AuthorizationHandler : DelegatingHandler
             cancellationToken
         );
 
-        if (!string.IsNullOrEmpty(token.Token))
+        if (string.IsNullOrEmpty(token.Token) == false)
         {
             _accessToken = token.Token;
         }
 
-        return token;
+        return default;
     }
 
     //

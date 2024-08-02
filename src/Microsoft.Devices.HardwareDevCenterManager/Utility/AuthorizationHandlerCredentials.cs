@@ -4,30 +4,48 @@
     Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
 
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.Devices.HardwareDevCenterManager.Utility;
 
 public class AuthorizationHandlerCredentials
 {
-    [JsonPropertyName("key")]
-    public string Key { get; set; }
-
-    [JsonPropertyName("clientId")]
-    public string ClientId { get; set; }
+    // used for Azure
+    [JsonPropertyName("authority")]
+    public string Authority { get; set; }
 
     [JsonPropertyName("tenantId")]
     public string TenantId { get; set; }
 
-    [JsonPropertyName("url")]
-    public System.Uri Url { get; set; }
+    [JsonPropertyName("clientId")]
+    public string ClientId { get; set; }
 
-    [JsonPropertyName("urlPrefix")]
-    public System.Uri UrlPrefix { get; set; }
-
+    // used for managed identity
     [JsonPropertyName("managedIdentityClientId")]
     public string ManagedIdentityClientId { get; set; }
 
     [JsonPropertyName("scope")]
     public string Scope { get; set; }
+
+    // used for certificate
+    [JsonPropertyName("x509Certificate2")]
+    public X509Certificate2 X509Certificate2 { get; set; }
+
+    [JsonPropertyName("x509Certificate2Name")]
+    public string X509Certificate2Name { get; set; }
+
+    [JsonPropertyName("keyVaultUrl")]
+    public string KeyVaultUrl { get; set; }
+
+    // used for client credentials
+    [JsonPropertyName("key")]
+    public string Key { get; set; }
+
+    // used for HDC
+    [JsonPropertyName("url")]
+    public System.Uri Url { get; set; }
+
+    [JsonPropertyName("urlPrefix")]
+    public System.Uri UrlPrefix { get; set; }
 }
