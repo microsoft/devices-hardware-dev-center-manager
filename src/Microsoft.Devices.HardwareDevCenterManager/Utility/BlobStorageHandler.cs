@@ -20,10 +20,10 @@ public class BlobStorageHandler
     /// <summary>
     /// Handles upload and download of files for HDC Azure Blob Storage URLs
     /// </summary>
-    /// <param name="SASUrl">URL String to the blob</param>
-    public BlobStorageHandler(string SASUrl)
+    /// <param name="sasUrl">URL String to the blob</param>
+    public BlobStorageHandler(string sasUrl)
     {
-        _blockBlobClient = new BlockBlobClient(new Uri(SASUrl));
+        _blockBlobClient = new BlockBlobClient(new Uri(sasUrl));
     }
 
     /// <summary>
@@ -35,8 +35,8 @@ public class BlobStorageHandler
     {
         try
         {
-            using System.IO.FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Read);
-            await _blockBlobClient.UploadAsync(fileStream, null, default);
+            using System.IO.FileStream fileStream = File.OpenRead(filePath);
+            await _blockBlobClient.UploadAsync(fileStream);
         }
         catch (RequestFailedException rfe)
         {
