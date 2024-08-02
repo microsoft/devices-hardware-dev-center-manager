@@ -21,12 +21,14 @@ public class AuthorizationHandlerCredentials
     [JsonPropertyName("clientId")]
     public string ClientId { get; set; }
 
+    // used for managed identity
     [JsonPropertyName("managedIdentityClientId")]
     public string ManagedIdentityClientId { get; set; }
 
     [JsonPropertyName("scope")]
     public string Scope { get; set; }
 
+    // used for certificate
     [JsonPropertyName("x509Certificate2")]
     public X509Certificate2 X509Certificate2 { get; set; }
 
@@ -36,11 +38,11 @@ public class AuthorizationHandlerCredentials
     [JsonPropertyName("keyVaultUrl")]
     public string KeyVaultUrl { get; set; }
 
-
-    // used for HDC
+    // used for client credentials
     [JsonPropertyName("key")]
     public string Key { get; set; }
 
+    // used for HDC
     [JsonPropertyName("url")]
     public System.Uri Url { get; set; }
 
