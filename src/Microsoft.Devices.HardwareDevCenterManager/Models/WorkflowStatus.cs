@@ -4,6 +4,7 @@
     Licensed under the MIT license. See LICENSE file in the project root for full license information.  
 --*/
 
+using Microsoft.Devices.HardwareDevCenterManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -13,6 +14,7 @@ namespace Microsoft.Devices.HardwareDevCenterManager.DevCenterApi;
 
 public class WorkflowStatus
 {
+    [JsonConverter(typeof(LongToStringJsonConverter))]
     [JsonPropertyName("currentStep")]
     public string CurrentStep { get; set; }
 
