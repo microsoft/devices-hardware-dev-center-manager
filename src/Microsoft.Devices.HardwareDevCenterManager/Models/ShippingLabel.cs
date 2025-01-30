@@ -127,6 +127,16 @@ public class ShippingLabel : IArtifact
                 Console.WriteLine("               flooringBuildNumber: " + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
                 Console.WriteLine("               ceilingBuildNumber:  " + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
             }
+
+            //  visible to accounts
+            if (PublishingSpecifications?.VisibleToAccounts != null)
+            {
+                Console.WriteLine("           visibleToAccounts:");
+                foreach (long account in PublishingSpecifications?.VisibleToAccounts)
+                {
+                    Console.WriteLine($"            {account}");
+                }
+            }
         }
 
         Console.WriteLine("         Links:");
