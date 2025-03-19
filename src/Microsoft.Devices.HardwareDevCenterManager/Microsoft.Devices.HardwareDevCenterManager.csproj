@@ -9,7 +9,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</PackageProjectUrl>
     <RepositoryUrl>https://github.com/microsoft/devices-hardware-dev-center-manager</RepositoryUrl>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
