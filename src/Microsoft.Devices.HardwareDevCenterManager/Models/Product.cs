@@ -114,15 +114,14 @@ public class Product : IArtifact
         Console.WriteLine("         testHarness: " + TestHarness ?? "");
         Console.WriteLine("         message: " + Message ?? "");
 
-        if (string.IsNullOrWhiteSpace(SourcePublisherId))
+        if (!string.IsNullOrWhiteSpace(SourcePublisherId))
         {
             Console.WriteLine("         Source Publisher:    " + SourcePublisherId ?? "");
         }
-        if (string.IsNullOrWhiteSpace(SourceProductId))
+        if (!string.IsNullOrWhiteSpace(SourceProductId))
         {
             Console.WriteLine("         Source Product Id:    " + SourceProductId ?? "");
         }
-
         Console.WriteLine("         Signatures:");
         foreach (string sig in RequestedSignatures)
         {
