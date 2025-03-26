@@ -1,7 +1,7 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
 
 using Microsoft.Devices.HardwareDevCenterManager.Utility;
@@ -126,6 +126,16 @@ public class ShippingLabel : IArtifact
             {
                 Console.WriteLine("               flooringBuildNumber: " + Targeting.CoEngDriverPublishInfo.FlooringBuildNumber);
                 Console.WriteLine("               ceilingBuildNumber:  " + Targeting.CoEngDriverPublishInfo.CeilingBuildNumber);
+            }
+
+            //  visible to accounts
+            if (PublishingSpecifications?.VisibleToAccounts != null)
+            {
+                Console.WriteLine("           visibleToAccounts:");
+                foreach (long account in PublishingSpecifications?.VisibleToAccounts)
+                {
+                    Console.WriteLine($"            {account}");
+                }
             }
         }
 

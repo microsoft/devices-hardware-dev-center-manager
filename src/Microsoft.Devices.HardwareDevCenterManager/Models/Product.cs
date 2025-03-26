@@ -1,7 +1,7 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
 
 using Microsoft.Devices.HardwareDevCenterManager.Utility;
@@ -22,6 +22,14 @@ public class Product : IArtifact
     [JsonPropertyName("sharedProductId")]
     public string SharedProductId { get; set; }
 
+    [JsonConverter(typeof(LongToStringJsonConverter))]
+    [JsonPropertyName("sourceProductId")]
+    public string SourceProductId { get; set; }
+
+    [JsonConverter(typeof(LongToStringJsonConverter))]
+    [JsonPropertyName("sourcePublisherId")]
+    public string SourcePublisherId { get; set; }
+
     [JsonPropertyName("productName")]
     public string ProductName { get; set; }
 
@@ -33,12 +41,6 @@ public class Product : IArtifact
 
     [JsonPropertyName("deviceType")]
     public string DeviceType { get; set; }
-
-    [JsonPropertyName("isTestSign")]
-    public bool IsTestSign { get; set; }
-
-    [JsonPropertyName("isFlightSign")]
-    public bool IsFlightSign { get; set; }
 
     [JsonPropertyName("requestedSignatures")]
     public List<string> RequestedSignatures { get; set; }
@@ -70,6 +72,12 @@ public class Product : IArtifact
     [JsonPropertyName("selectedProductTypes")]
     public Dictionary<string, string> SelectedProductTypes { get; set; }
 
+    [JsonPropertyName("isTestSign")]
+    public bool IsTestSign { get; set; }
+
+    [JsonPropertyName("isFlightSign")]
+    public bool IsFlightSign { get; set; }
+
     [JsonPropertyName("isCommitted")]
     public bool IsCommitted { get; set; }
 
@@ -78,6 +86,12 @@ public class Product : IArtifact
 
     [JsonPropertyName("additionalAttributes")]
     public AdditionalAttributes AdditionalAttributes { get; set; }
+
+    [JsonPropertyName("links")]
+    public List<Link> Links { get; set; }
+
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
 
     public void Dump()
     {
@@ -98,7 +112,16 @@ public class Product : IArtifact
         Console.WriteLine("         updatedDateTime:  " + UpdatedDateTime.ToString("s", CultureInfo.CurrentCulture));
         Console.WriteLine("         announcementDate: " + AnnouncementDate.ToString("s", CultureInfo.CurrentCulture));
         Console.WriteLine("         testHarness: " + TestHarness ?? "");
+        Console.WriteLine("         message: " + Message ?? "");
 
+        if (!string.IsNullOrWhiteSpace(SourcePublisherId))
+        {
+            Console.WriteLine("         Source Publisher:    " + SourcePublisherId ?? "");
+        }
+        if (!string.IsNullOrWhiteSpace(SourceProductId))
+        {
+            Console.WriteLine("         Source Product Id:    " + SourceProductId ?? "");
+        }
         Console.WriteLine("         Signatures:");
         foreach (string sig in RequestedSignatures)
         {
@@ -162,6 +185,15 @@ public class Product : IArtifact
                 Console.WriteLine("         svvp:");
                 Console.WriteLine("             maxProcessors: " + AdditionalAttributes.Svvp.MaxProcessors);
                 Console.WriteLine("             maxMemory:     " + AdditionalAttributes.Svvp.MaxMemory);
+            }
+        }
+
+        Console.WriteLine("         Links:");
+        if (Links != null)
+        {
+            foreach (Link link in Links)
+            {
+                link.Dump();
             }
         }
         Console.WriteLine();

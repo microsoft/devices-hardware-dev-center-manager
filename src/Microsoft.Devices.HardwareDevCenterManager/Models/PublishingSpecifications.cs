@@ -1,7 +1,7 @@
 ﻿/*++
     Copyright (c) Microsoft Corporation. All rights reserved.
 
-    Licensed under the MIT license. See LICENSE file in the project root for full license information.  
+    Licensed under the MIT license. See LICENSE file in the project root for full license information.
 --*/
 
 using System;
@@ -16,7 +16,7 @@ public class PublishingSpecifications
     public DateTime GoLiveDate { get; set; }
 
     [JsonPropertyName("visibleToAccounts")]
-    public List<string> VisibleToAccounts { get; set; }
+    public List<long> VisibleToAccounts { get; set; }
 
     [JsonPropertyName("isAutoInstallDuringOSUpgrade")]
     public bool IsAutoInstallDuringOSUpgrade { get; set; }
